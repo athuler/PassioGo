@@ -1,5 +1,8 @@
 # Passio Go API
 
+![Pepy Total Downlods](https://img.shields.io/pepy/dt/PassioGo)
+
+
 An **unofficial** Python API for [Passio Go](https://passiogo.com/) allowing anyone to build transit-based applications for hundreds of Universities, Municipalities, Paratransit, and Airports. 
 
 
