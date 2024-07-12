@@ -1,14 +1,15 @@
+# .github/workflows/ci-cd.yml
 jobs:
   pypi-publish:
-    name: upload release to PyPI
+    name: Upload release to PyPI
     runs-on: ubuntu-latest
-    # Specifying a GitHub environment is optional, but strongly encouraged
-    environment: release
+    environment:
+      name: pypi
+      url: https://pypi.org/p/passiogo
     permissions:
-      # IMPORTANT: this permission is mandatory for trusted publishing
-      id-token: write
+      id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing
     steps:
-      # retrieve your distributions here
+    # retrieve your distributions here
 
-      - name: Publish package distributions to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
+    - name: Publish package distributions to PyPI
+      uses: pypa/gh-action-pypi-publish@release/v1
