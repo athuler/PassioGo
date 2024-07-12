@@ -18,5 +18,8 @@ setup(
 	packages=find_packages(),
 	py_modules=find_packages(),
 	install_requires=requires,
-	
+	project_urls = {
+		'Documentation': 'https://passiogo.readthedocs.io/',
+		'GitHub': 'https://github.com/athuler/PassioGo'
+	},
 )
