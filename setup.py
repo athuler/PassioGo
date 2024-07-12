@@ -20,6 +20,7 @@ setup(
 	project_urls = {
 		'Documentation': 'https://passiogo.readthedocs.io/',
 		'GitHub': 'https://github.com/athuler/PassioGo',
-		'Support':'https://github.com/sponsors/athuler'
+		'Support':'https://github.com/sponsors/athuler',
+		'Changelog':'https://github.com/athuler/PassioGo/blob/main/CHANGELOG.md',
 	},
 )
