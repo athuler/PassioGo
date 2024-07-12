@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.1.1 - 2024-07-12
+## 0.1.1 (2024-07-12)
 
 ### Added
 - Create Documentation With ReadTheDocs.io
@@ -16,6 +16,6 @@
 - None
 
 
-## 0.1.0 - 2024-07-12
+## 0.1.0 (2024-07-12)
 
 - Initial Commit
