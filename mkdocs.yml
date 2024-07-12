@@ -1,3 +1,4 @@
 site_name: PassioGo
 docs_dir: docs
+repo_url: https://github.com/athuler/PassioGo
 theme: readthedocs
