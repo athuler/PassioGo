@@ -45,7 +45,7 @@ jobs:
         pip install pytest pytest-cov
         pytest
     - name: Build package
-      run: python -m build --no-isolation --verbose "${GITHUB_WORKSPACE}"
+      run: python -m build --no-isolation --verbose --wheel "${GITHUB_WORKSPACE}"
     - name: Publish package
       uses: pypa/gh-action-pypi-publish@release/v1
      # with:
