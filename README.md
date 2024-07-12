@@ -1,11 +1,24 @@
 # Passio Go API
 
----
+An **unofficial** Python API for [Passio Go](https://passiogo.com/) allowing anyone to build transit-based applications for hundreds of Universities, Municipalities, Paratransit, and Airports. 
 
-[Passio Go](https://passiogo.com/) is a transit technology company that supplies Universities, Municipalities with tracking technology. This **unofficial** API allows for third-parties to build applications on top of *Passio Go*'s technology.
+
+## Installation
+
+The package is available to download using [pip](https://pypi.org/project/PassioGo/).
+
+```
+pip install passiogo
+```
+
+
+## All Transportation Systems Accessible By The API
+
+Collapsed below are 
 
 <details>
-<summary>List of All Transportation Systems Accessible By The API</summary>
+<summary>Expand to Show All Systems</summary>
+<br/>
 
 *Last Updated: 2024/07/12*
 
@@ -214,5 +227,9 @@
 - WestMar
 - Woodbridge Village/Gardens/Colonial
 - XChange at Secaucus Junction
-
 </details>
+
+
+## Changelog
+
+This project's changelog is available at [`CHANGELOG.md`](https://github.com/athuler/PassioGo/blob/main/CHANGELOG.md)
