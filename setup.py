@@ -1,5 +1,4 @@
 from setuptools import setup, find_packages
-from passiogo import __version__
 
 with open("README.md", 'r') as f:
 	long_description = f.read()
@@ -9,8 +8,8 @@ with open("requirements.txt", "r") as fh:
 
 setup(
 	name='PassioGo',
-	version=__version__,
-	description="Tracking the Performance of UChicago's Shuttle Network",
+	version="0.1.1",
+	description="A simple way to interact with ",
 	long_description=long_description,
 	author='Andrei Thuler',
 	author_email='info@andreithuler.com',
@@ -20,6 +19,7 @@ setup(
 	install_requires=requires,
 	project_urls = {
 		'Documentation': 'https://passiogo.readthedocs.io/',
-		'GitHub': 'https://github.com/athuler/PassioGo'
+		'GitHub': 'https://github.com/athuler/PassioGo',
+		'Support':'https://github.com/sponsors/athuler'
 	},
 )

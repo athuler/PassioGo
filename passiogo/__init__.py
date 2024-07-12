@@ -2,7 +2,6 @@ import requests
 import websocket
 import json
 
-__version__ = "0.1.0"
 BASE_URL = "https://passiogo.com"
 
 
