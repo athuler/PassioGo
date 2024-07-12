@@ -187,6 +187,7 @@ def getSystems(
 	
 	return(systems)
 
+
 def printAllSystemsMd(
 	paramDigit = 2,
 	sortMode = 1,
@@ -196,6 +197,7 @@ def printAllSystemsMd(
 	
 	for system in systems["all"]:
 		print(f"- {system['fullname']}")
+
 
 # Launch WebSocket
 def launchWS():
@@ -218,12 +220,13 @@ def launchWS():
 	
 def handleWsError(wsapp, error):
 	vars.errors.append(f"->WebSocketError: {error}")
-	
+
+
 def handleWsClose(wsapp, close_status_code, close_msg):
 	wsapp.close()
 	vars.logs.append("Closing WebSocket")
-	
-	
+
+
 def subscribeWS(
 	wsapp,
 	userId = 1068
