@@ -14,7 +14,7 @@ pip install passiogo
 
 ## All Transportation Systems Accessible By The API
 
-Collapsed below are 
+Collapsed below are all the transportation systems publicly available through this API.
 
 <details>
 <summary>Expand to Show All Systems</summary>
