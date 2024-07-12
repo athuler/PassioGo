@@ -2,7 +2,6 @@ import requests
 import websocket
 import json
 
-__version__ = "0.1.0"
 BASE_URL = "https://passiogo.com"
 
 
@@ -160,6 +159,43 @@ def getBuses(
 	return(buses)
 
 
+def getSystems(
+	paramDigit = 2,
+	sortMode = 1,
+	deviceId = 43647468
+):
+	"""
+	Gets all system alerts for the selected system.
+	=========
+	systemSelected: system from which to get content
+	paramDigit:
+		0: Error
+		>=1: Valid
+	"""
+	
+	
+	# Initialize & Send Request
+	url = f"{BASE_URL}/mapGetData.php?getSystems={paramDigit}&sortMode={sortMode}&deviceId={deviceId}&credentials=1"
+	systems = sendApiRequest(url, None)
+	
+	
+	# Handle Request Error
+	if(systems == None):
+		return(None)
+	
+	
+	
+	return(systems)
+
+def printAllSystemsMd(
+	paramDigit = 2,
+	sortMode = 1,
+	deviceId = 43647468
+):
+	systems = getSystems(paramDigit,sortMode,deviceId)
+	
+	for system in systems["all"]:
+		print(f"- {system['fullname']}")
 
 # Launch WebSocket
 def launchWS():
