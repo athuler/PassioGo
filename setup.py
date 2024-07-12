@@ -9,7 +9,7 @@ with open("requirements.txt", "r") as fh:
 setup(
 	name='PassioGo',
 	version="0.1.1",
-	description="A simple way to interact with ",
+	description="An unofficial API for Passio Go",
 	long_description=long_description,
 	author='Andrei Thuler',
 	author_email='info@andreithuler.com',
