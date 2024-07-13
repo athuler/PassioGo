@@ -11,6 +11,7 @@ setup(
 	version="0.1.1",
 	description="An unofficial API for Passio Go",
 	long_description=long_description,
+	long_description_content_type='text/markdown',
 	author='Andrei Thuler',
 	author_email='info@andreithuler.com',
 	url="https://github.com/athuler/PassioGo",
