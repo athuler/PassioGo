@@ -1,6 +1,7 @@
 # Passio Go API
 
-![Pepy Total Downlods](https://img.shields.io/pepy/dt/PassioGo)
+[![Pepy Total Downlods](https://img.shields.io/pepy/dt/PassioGo)](https://www.pepy.tech/projects/passiogo)
+[![Documentation Status](https://readthedocs.org/projects/passiogo/badge/?version=latest)](https://passiogo.readthedocs.io/en/latest/?badge=latest)
 
 
 An **unofficial** Python API for [Passio Go](https://passiogo.com/) allowing anyone to build transit-based applications for hundreds of Universities, Municipalities, Paratransit, and Airports. 
@@ -14,6 +15,32 @@ The package is available to download using [pip](https://pypi.org/project/Passio
 pip install passiogo
 ```
 
+## Documentation
+
+Project documentation for the latest stable version is available at [passiogo.readthedocs.io](https://passiogo.readthedocs.io/). Documentation for other versions is available at [passiogo.readthedocs.io/en/X.X.X](https://passiogo.readthedocs.io/en/0.1.2/).
+
+The documentation is built using `mkdocs` and can be rebuilt using the following:
+
+```
+pip install -r docs/requirements.txt
+mkdocs serve
+```
+
+
+## Changelog
+
+This project's changelog is available at [`CHANGELOG.md`](https://github.com/athuler/PassioGo/blob/main/CHANGELOG.md)
+
+
+## Bug Reporting / Feedback
+
+Found a bug? Have an idea for a new feature? Please [send it in as a GitHub issue](https://github.com/athuler/PassioGo/issues)!
+
+
+## Contributing
+
+Interested in contributing to this package? [Fork the repository](https://github.com/athuler/PassioGo/fork), make your edits, then open a pull request!
+
 
 ## All Transportation Systems Accessible By The API
 
@@ -21,219 +48,217 @@ Collapsed below are all the transportation systems publicly available through th
 
 <details>
 <summary>Expand to Show All Systems</summary>
+
 <br/>
 
-*Last Updated: 2024/07/12*
+<i>Last Updated: 2024/07/14</i><br/><br/>
 
-- 3630 Peachtree
-- 5025 Apartments
-- 725 Ponce
-- Agnes Scott College
-- Alabama A&M University
-- Anne Arundel County Office of Transportation
-- Atlantic Station
-- AUC
-- Audible
-- Augusta University
-- Bayonne Bay
-- Beacon College
-- Beacon Shuttle
-- Beloit Transit
-- Bis-Man Transit
-- Bowie State University
-- Brockton Area Transit Authority (BAT)
-- Bull Runner at USF
-- Cal State San Bernardino
-- Canby Area Transit
-- Cascades East Transit
-- Casper Area Transit
-- Century Village (FT)
-- Chapman University
-- Charles River TMA
-- Charleston Airport REEF
-- Charm City Circulator
-- Chemung County (C-Tran)
-- CHOA
-- Citrus Connection
-- City of Arcadia
-- City of Bangor
-- City of Billings MET Transit
-- City of Cerritos
-- City of Clovis
-- City of Detroit - Employee Shuttle
-- City of Harrisonburg Department of Public Transportation (HDPT)
-- City of Hoboken
-- City of Irvine
-- City of Jackson (JTRAN)
-- City of Jacksonville
-- City of Monterey Park
-- City of Newport Beach (Balboa Peninsula Trolley)
-- City of Olean
-- City of Rosemead
-- City of Sandy
-- City of Tracy (MTM / Tracer Transit)
-- City of Tyler
-- City of Watertown (CitiBus)
-- Citylink Edmond
-- Citylink North (Kootenai County)
-- Citylink South
-- Clackamas County
-- Clemson Tiger Transit
-- Coca Cola
-- Colby College
-- Columbia University
-- Concho Valley Transit
-- Concord Kannapolis Area Transit
-- Concourse
-- Connect Douglas
-- Cooperative Alliance for Seacoast Transportation (COAST)
-- Coral Gables
-- CoryD (Test)
-- County Connector
-- CSULB
-- Disney Programs
-- District of Chamblee
-- Drury Plaza Hotel - Disney Springs
-- Eastern Kentucky University
-- Eastern Panhandle Transit Authority (EPTA)
-- Eastern Virginia Medical School
-- Elon University
-- Emory University
-- Endicott College
-- ES Atlanta
-- Escambia County Area Transit (ECAT)
-- ETHRA
-- EWR Employee Shuttle
-- EWR Port Authority NYNJ
-- FIT NY
-- Florham Park (Sun Valley/River Bend)
-- Florida Gulf Coast University (FGCU)
-- Florida International University
-- ForestView/Evergreen/Evergreen East
-- Fort Saskatchewan Transit (PWTransit Canada Ltd.)
-- Franklin Regional Transit Authority
-- Franklin Transit
-- Fresh Direct (Pro Park)
-- Fresno State University
-- GatewayJFK Connection
-- George Washington University (GW)
-- Georgia College & State University (GCSU)
-- Georgia Southern University
-- Georgia State University
-- Georgia Tech
-- GoBus
-- Harford County
-- Harris County Transit
-- HARTransit
-- Harvard University
-- Hendry County Transit System
-- Highland Hospital Metropolis
-- Hill Place Apartments
-- Hollins University
-- Houston Airport (SP+)
-- Hutch Metro Center
-- Interurban Trolley
-- Jasper Transit
-- JFK LGA Shuttles
-- Kentucky River Foothills
-- Key West Transit
-- Lawrence Transit
-- Lehigh University
-- Los Angeles International Airport (LAX)
-- Marymount University
-- Mayaguez (Skytec)
-- McAfee Knob Trailhead (Ridesource)
-- Mercy University
-- Metropolis Parking (Anschutz Campus)
-- Missouri State University
-- MIT
-- Montachusett Regional Transit Authority (MART)
-- National Cancer Institute
-- NC State University
-- New River Transit Authority
-- New York University
-- North Carolina A&T State University
-- North Fork Area Transit
-- Otter Bus (Ridesource)
-- Ozark Regional Transit
-- Palm Beach International Airport Parking Shuttle
-- Pepperdine University
-- Pittsburgh International Airport (PIT)
-- Port of Galveston (LAZ Parking)
-- Portage Area Regional Transit Authority (PARTA)
-- Providence College
-- Quinnipiac University
-- Radford Transit
-- Ravinia
-- River Valley Transit
-- River Valley Transit
-- Roadrunner Transit
-- Rochester Institute of Technology (RIT)
-- Roger Williams University
-- Rutgers University
-- Sacramento Airport Park & Ride
-- Saint Peter's University
-- Sales Demo - SR
-- Seneca Transit System
-- Sioux City Transit
-- SMART Transit
-- South Clackamas Transportation District
-- Southeastern Louisiana University
-- Southern Connecticut State University
-- St. Lawrence County Public Transit
-- St. Vincent's (Pinnacle Transportation Group)
-- State Shuttle (Onyx Equities)
-- STC Atlanta Georgia
-- Stevens Point - Central Transportation
-- Tennessee Technological University
-- Terraces (Pinnacle Transportation Group)
-- The Concord Trolley
-- The Cottages at Lake Tamaha Tuscaloosa
-- The Galleria (Reef Parking)
-- The Hartford
-- The U Apartments Raleigh
-- Township of West Orange
-- Towson Loop (Baltimore County)
-- Tulane University
-- Tuscaloosa Transit Authority
-- UARK (University of Arkansas)
-- UCONN/WRTD
-- UNC Charlotte
-- UNC Greensboro (UNCG)
-- UNC Wilmington
-- University at Buffalo
-- University of Alabama
-- University of Chicago
-- University of Florida (UF)
-- University of Georgia (UGA)
-- University of Hartford
-- University of Miami Medical Center (Reef Parking)
-- University of Michigan-Dearborn
-- University of Montana (ASUM)
-- University of New Haven
-- University of New Mexico (UNM)
-- University of North Georgia
-- University of Rochester
-- University of San Diego Tram Services
-- University of Texas at El Paso (UTEP)
-- University of Wisconsin-Milwaukee
-- Upper Cumberland Human Resource Agency (UCHRA)
-- Utah State University
-- Vanderbilt University
-- Vanderbilt University Medical Center
-- Via Mobility Services
-- VMware
-- Wake Forest University
-- WaterColor Community Association
-- West Midtown Shuttle
-- Western Carolina University
-- WestMar
-- Woodbridge Village/Gardens/Colonial
-- XChange at Secaucus Junction
+- 3630 Peachtree<br/>
+- 5025 Apartments<br/>
+- 725 Ponce<br/>
+- Agnes Scott College<br/>
+- Alabama A&M University<br/>
+- Anne Arundel County Office of Transportation<br/>
+- Atlantic Station<br/>
+- AUC<br/>
+- Audible<br/>
+- Augusta University<br/>
+- Bayonne Bay<br/>
+- Beacon College<br/>
+- Beacon Shuttle<br/>
+- Beloit Transit<br/>
+- Bis-Man Transit<br/>
+- Bowie State University<br/>
+- Brockton Area Transit Authority (BAT)<br/>
+- Bull Runner at USF<br/>
+- Cal State San Bernardino<br/>
+- Canby Area Transit<br/>
+- Cascades East Transit<br/>
+- Casper Area Transit<br/>
+- Century Village (FT)<br/>
+- Chapman University<br/>
+- Charles River TMA<br/>
+- Charleston Airport REEF<br/>
+- Charm City Circulator<br/>
+- Chemung County (C-Tran)<br/>
+- CHOA<br/>
+- Citrus Connection<br/>
+- City of Arcadia<br/>
+- City of Bangor<br/>
+- City of Billings MET Transit<br/>
+- City of Cerritos<br/>
+- City of Clovis<br/>
+- City of Detroit - Employee Shuttle<br/>
+- City of Harrisonburg Department of Public Transportation (HDPT)<br/>
+- City of Hoboken<br/>
+- City of Irvine<br/>
+- City of Jackson (JTRAN)<br/>
+- City of Jacksonville<br/>
+- City of Monterey Park<br/>
+- City of Newport Beach (Balboa Peninsula Trolley)<br/>
+- City of Olean<br/>
+- City of Rosemead<br/>
+- City of Sandy<br/>
+- City of Tracy (MTM / Tracer Transit)<br/>
+- City of Tyler<br/>
+- City of Watertown (CitiBus)<br/>
+- Citylink Edmond<br/>
+- Citylink North (Kootenai County)<br/>
+- Citylink South<br/>
+- Clackamas County<br/>
+- Clemson Tiger Transit<br/>
+- Clemson University<br/>
+- Coca Cola<br/>
+- Colby College<br/>
+- Columbia University<br/>
+- Concho Valley Transit<br/>
+- Concord Kannapolis Area Transit<br/>
+- Concourse<br/>
+- Connect Douglas<br/>
+- Cooperative Alliance for Seacoast Transportation (COAST)<br/>
+- Coral Gables<br/>
+- CoryD (Test)<br/>
+- County Connector<br/>
+- CSULB<br/>
+- Disney Programs<br/>
+- District of Chamblee<br/>
+- Drury Plaza Hotel - Disney Springs<br/>
+- Eastern Kentucky University<br/>
+- Eastern Panhandle Transit Authority (EPTA)<br/>
+- Eastern Virginia Medical School<br/>
+- Elon University<br/>
+- Emory University<br/>
+- Endicott College<br/>
+- ES Atlanta<br/>
+- Escambia County Area Transit (ECAT)<br/>
+- ETHRA<br/>
+- EWR Employee Shuttle<br/>
+- EWR Port Authority NYNJ<br/>
+- FIT NY<br/>
+- Florham Park (Sun Valley/River Bend)<br/>
+- Florida Gulf Coast University (FGCU)<br/>
+- Florida International University<br/>
+- ForestView/Evergreen/Evergreen East<br/>
+- Fort Saskatchewan Transit (PWTransit Canada Ltd.)<br/>
+- Franklin Regional Transit Authority<br/>
+- Franklin Transit<br/>
+- Fresh Direct (Pro Park)<br/>
+- Fresno State University<br/>
+- GatewayJFK Connection<br/>
+- George Washington University (GW)<br/>
+- Georgia College & State University (GCSU)<br/>
+- Georgia Southern University<br/>
+- Georgia State University<br/>
+- Georgia Tech<br/>
+- GoBus<br/>
+- Harford County<br/>
+- Harris County Transit<br/>
+- HARTransit<br/>
+- Harvard University<br/>
+- Hendry County Transit System<br/>
+- Highland Hospital Metropolis<br/>
+- Hill Place Apartments<br/>
+- Hollins University<br/>
+- Houston Airport (SP+)<br/>
+- Hutch Metro Center<br/>
+- Interurban Trolley<br/>
+- Jasper Transit<br/>
+- JFK LGA Shuttles<br/>
+- Kentucky River Foothills<br/>
+- Key West Transit<br/>
+- Lawrence Transit<br/>
+- Lehigh University<br/>
+- Los Angeles International Airport (LAX)<br/>
+- Marymount University<br/>
+- Mayaguez (Skytec)<br/>
+- McAfee Knob Trailhead (Ridesource)<br/>
+- Mercy University<br/>
+- Metropolis Parking (Anschutz Campus)<br/>
+- Missouri State University<br/>
+- MIT<br/>
+- Montachusett Regional Transit Authority (MART)<br/>
+- National Cancer Institute<br/>
+- NC State University<br/>
+- New River Transit Authority<br/>
+- New York University<br/>
+- North Carolina A&T State University<br/>
+- North Fork Area Transit<br/>
+- Otter Bus (Ridesource)<br/>
+- Ozark Regional Transit<br/>
+- Palm Beach International Airport Parking Shuttle<br/>
+- Pepperdine University<br/>
+- Pittsburgh International Airport (PIT)<br/>
+- Port of Galveston (LAZ Parking)<br/>
+- Portage Area Regional Transit Authority (PARTA)<br/>
+- Providence College<br/>
+- Quinnipiac University<br/>
+- Radford Transit<br/>
+- Ravinia<br/>
+- River Valley Transit<br/>
+- River Valley Transit<br/>
+- Roadrunner Transit<br/>
+- Rochester Institute of Technology (RIT)<br/>
+- Roger Williams University<br/>
+- Rutgers University<br/>
+- Sacramento Airport Park & Ride<br/>
+- Saint Peter's University<br/>
+- Sales Demo - SR<br/>
+- Seneca Transit System<br/>
+- Sioux City Transit<br/>
+- SMART Transit<br/>
+- South Clackamas Transportation District<br/>
+- Southeastern Louisiana University<br/>
+- Southern Connecticut State University<br/>
+- St. Lawrence County Public Transit<br/>
+- St. Vincent's (Pinnacle Transportation Group)<br/>
+- State Shuttle (Onyx Equities)<br/>
+- STC Atlanta Georgia<br/>
+- Stevens Point - Central Transportation<br/>
+- Tennessee Technological University<br/>
+- Terraces (Pinnacle Transportation Group)<br/>
+- The Concord Trolley<br/>
+- The Cottages at Lake Tamaha Tuscaloosa<br/>
+- The Galleria (Reef Parking)<br/>
+- The Hartford<br/>
+- The U Apartments Raleigh<br/>
+- Township of West Orange<br/>
+- Towson Loop (Baltimore County)<br/>
+- Tulane University<br/>
+- Tuscaloosa Transit Authority<br/>
+- UARK (University of Arkansas)<br/>
+- UCONN/WRTD<br/>
+- UNC Charlotte<br/>
+- UNC Greensboro (UNCG)<br/>
+- UNC Wilmington<br/>
+- University at Buffalo<br/>
+- University of Alabama<br/>
+- University of Chicago<br/>
+- University of Florida (UF)<br/>
+- University of Georgia (UGA)<br/>
+- University of Hartford<br/>
+- University of Miami Medical Center (Reef Parking)<br/>
+- University of Michigan-Dearborn<br/>
+- University of Montana (ASUM)<br/>
+- University of New Haven<br/>
+- University of New Mexico (UNM)<br/>
+- University of North Georgia<br/>
+- University of Rochester<br/>
+- University of San Diego Tram Services<br/>
+- University of Texas at El Paso (UTEP)<br/>
+- University of Wisconsin-Milwaukee<br/>
+- Upper Cumberland Human Resource Agency (UCHRA)<br/>
+- Utah State University<br/>
+- Vanderbilt University<br/>
+- Vanderbilt University Medical Center<br/>
+- Via Mobility Services<br/>
+- VMware<br/>
+- Wake Forest University<br/>
+- WaterColor Community Association<br/>
+- West Midtown Shuttle<br/>
+- Western Carolina University<br/>
+- WestMar<br/>
+- Woodbridge Village/Gardens/Colonial<br/>
+- XChange at Secaucus Junction<br/>
 
 </details>
-
-
-## Changelog
-
-This project's changelog is available at [`CHANGELOG.md`](https://github.com/athuler/PassioGo/blob/main/CHANGELOG.md)
+<br/>
