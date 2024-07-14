@@ -1,16 +1,18 @@
 # Changelog
 
-## 0.1.2 [Unreleased]
+## 0.1.2 (2024-07-14)
 
 ### Added
-- None
+- Added License
 
 ### Changed
 - Fixed Documentation Build
+- All 
 - Fixed PyPi long description type
+- `printAllSystemsMd()` has the new parameter `includeHtml` with a default of `True` to render HTML breaks after each line
 
 ### Removed
-- None
+- Removed obsolete `debug` parameters
 
 
 ## 0.1.1 (2024-07-12)
