@@ -1,3 +1,5 @@
+{!README.md!}
+
 # Passio Go API Documentation
 
 This is an unofficial library for Passio Go.
