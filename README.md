@@ -1,6 +1,6 @@
 # Passio Go API
 
-![Pepy Total Downlods](https://img.shields.io/pepy/dt/PassioGo)
+[![Pepy Total Downlods](https://img.shields.io/pepy/dt/PassioGo)](https://www.pepy.tech/projects/passiogo)
 
 
 An **unofficial** Python API for [Passio Go](https://passiogo.com/) allowing anyone to build transit-based applications for hundreds of Universities, Municipalities, Paratransit, and Airports. 
@@ -232,6 +232,16 @@ Collapsed below are all the transportation systems publicly available through th
 - XChange at Secaucus Junction
 
 </details>
+
+
+## Bug Reporting / Feedback
+
+Found a bug? Have an idea for a new feature? Please [send it in as a GitHub issue](https://github.com/athuler/PassioGo/issues)!
+
+
+## Contributing
+
+Interested in contributing to this package? [Fork the repository](https://github.com/athuler/PassioGo/fork), make your edits, then open a pull request!
 
 
 ## Changelog
