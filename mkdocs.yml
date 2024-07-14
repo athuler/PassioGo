@@ -9,3 +9,9 @@ nav:
   - Home: index.md
   - Usage: usage.md
   - API Reference: api.md
+  
+#plugins:
+#  - search
+markdown_extensions:
+  - markdown_include.include:
+      base_path: .
