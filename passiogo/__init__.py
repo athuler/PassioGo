@@ -26,10 +26,9 @@ def sendApiRequest(url, body):
 
 
 def getAllRoutes(
-	systemSelected = 1068,
+	systemSelected,
 	paramDigit = 1,
-	amount = 1,
-	debug = 0
+	amount = 1
 ):
 	"""
 	Obtains every route for the selected system.
@@ -64,8 +63,8 @@ def getAllRoutes(
 
 
 def getAllStops(
+	systemSelected,
 	paramDigit = 2,
-	systemSelected = 1068,
 	sA = 1,
 	debug = 0
 ):
@@ -97,9 +96,8 @@ def getAllStops(
 
 
 def getSystemAlerts(
-	paramDigit = 1,
-	systemSelected = 1068,
-	debug = 0
+	systemSelected,
+	paramDigit = 1
 ):
 	"""
 	Gets all system alerts for the selected system.
@@ -130,9 +128,8 @@ def getSystemAlerts(
 
 
 def getBuses(
-	paramDigit = 2,
-	s0 = 1068,
-	debug = 0
+	systemSelected,
+	paramDigit = 2
 ):
 	"""
 	Gets all currently running buses.
@@ -147,7 +144,7 @@ def getBuses(
 	# Initialize & Send Request
 	url = BASE_URL+"/mapGetData.php?getBuses="+str(paramDigit)
 	body = {
-		"s0" : str(s0),
+		"s0" : str(systemSelected),
 		"sA" : 1
 	}
 	buses = sendApiRequest(url, body)
@@ -191,12 +188,13 @@ def getSystems(
 def printAllSystemsMd(
 	paramDigit = 2,
 	sortMode = 1,
-	deviceId = 43647468
+	deviceId = 43647468,
+	includeHtml = True
 ):
 	systems = getSystems(paramDigit,sortMode,deviceId)
 	
 	for system in systems["all"]:
-		print(f"- {system['fullname']}")
+		print(f"- {system['fullname']}{'<br/>' if includeHtml else ''}")
 
 
 # Launch WebSocket
