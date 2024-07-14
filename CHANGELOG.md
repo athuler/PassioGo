@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.1.2 [Unreleased]
+
+### Added
+- None
+
+### Changed
+- Fixed Documentation Build
+- Fixed PyPi long description type
+
+### Removed
+- None
+
+
 ## 0.1.1 (2024-07-12)
 
 ### Added
