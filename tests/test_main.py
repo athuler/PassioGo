@@ -1,19 +1,25 @@
 import passiogo
 
+def test_getAllSystems():
+	passiogo.getSystems
+	
+
+def test_printAllSystems():
+	passiogo.printAllSystemsMd()
+
+def test_getSystemFromId():
+	global testSystem
+	testSystem = passiogo.getSystemFromID(1068)
+
 def test_getAllRoutes():
-	passiogo.getAllRoutes(1068)
+	testSystem.getRoutes()
 
 def test_getAllStops():
-	passiogo.getAllStops(1068)
+	testSystem.getStops()
 	
 def test_getSystemAlerts():
-	passiogo.getSystemAlerts(1068)
+	testSystem.getSystemAlerts()
 
 def test_getBuses():
 	passiogo.getBuses(1068)
-
-def test_getSystems():
-	passiogo.getSystems()
 	
-def test_printAllSystems():
-	passiogo.printAllSystemsMd()

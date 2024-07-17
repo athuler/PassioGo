@@ -116,7 +116,188 @@ class TransportationSystem:
 		
 		# goAuthenticationType : bool or None
 		assert (type(self.goAuthenticationType) == bool or self.goAuthenticationType is None), f"'goAuthenticationType' parameter must be a bool not {type(self.goAuthenticationType)}"
+	
+	def getRoutes(
+		self,
+		appVersion = 1,
+		amount = 1
+	):
+		"""
+		Obtains every route for the selected system.
+		=========
+		systemSelected: system from which to get content
+		paramDigit: does not affect content of response, only formatting
+		amount:
+			1: Returns all routes for given system
+			0: Not Valid, Gives Error
+			>=2: Returns all routes for given system in addition to unrelated routes. Exact methodology unsure.
+		"""
+		
+		
+		# Initialize & Send Request
+		url = BASE_URL+f"/mapGetData.php?getRoutes={appVersion}"
+		body = {
+				"systemSelected0" : str(self.id),
+				"amount" : amount
+				}
+		routes = sendApiRequest(url, body)
+		
+		# Handle Request Error
+		if(routes == None):
+			return(None)
+		
+		# Handle Differing Response Format
+		if "all" in routes:
+			routes = routes["all"]
+		
+		allRoutes = []
+		
+		for route in routes:
+			possibleKeys = ["id", "groupId", "groupColor", "name", "shortName", "nameOrig", "fullname", "myid", "mapApp", "archive", "goPrefixRouteName", "goShowSchedule", "outdated", "distance", "latitude", "longitude", "timezone", "serviceTime", "serviceTimeShort"]
+			
+			for possibleKey in possibleKeys:
+				if possibleKey not in route.keys():
+					route[possibleKey] = None
+			
+			allRoutes.append(Route(
+				id = route["id"],
+				groupId = route["groupId"],
+				groupColor = route["groupColor"],
+				name = route["name"],
+				shortName = route["shortName"],
+				nameOrig = route["nameOrig"],
+				fullname = route["fullname"],
+				myid = route["myid"],
+				mapApp = route["mapApp"],
+				archive = route["archive"],
+				goPrefixRouteName = route["goPrefixRouteName"],
+				goShowSchedule = route["goShowSchedule"],
+				outdated = route["outdated"],
+				distance = route["distance"],
+				latitude = route["latitude"],
+				longitude = route["longitude"],
+				timezone = route["timezone"],
+				serviceTime = route["serviceTime"],
+				serviceTimeShort = route["serviceTimeShort"],
+				systemId = int(route["userId"]),
+				system = self
+			))
+		
+		return(allRoutes)
+	
+	def getStops(
+		self,
+		appVersion = 2,
+		sA = 1
+	):
+		"""
+		Obtains all stop for the given system.
+		=========
+		appVersion: No discernable change
+		sA:
+			0: error
+			1: Returns all stops for the given system
+			>=2: Returns unrelated stops as well
+		"""
+		
+		
+		# Initialize & Send Request
+		url = BASE_URL+"/mapGetData.php?getStops="+str(appVersion)
+		body = {
+			"s0" : str(self.id),
+			"sA" : sA
+		}
+		stops = sendApiRequest(url, body)
+		
+		# Handle Request Error
+		if(stops == None):
+			return(None)
+		
+		# Create Stop Objects
+		allStops = []
+		for id, stop in stops["stops"].items():
+			allStops.append(Stop(
+				id = stop["stopId"],
+				routeId = stop["routeId"],
+				systemId = stop["userId"],
+				position = stop["position"],
+				name = stop["name"],
+				latitude = stop["latitude"],
+				longitude = stop["longitude"],
+				radius = stop["radius"],
+				routeName = stop["routeName"],
+				routeShortname = stop["routeShortname"],
+				routeGroupId = stop["routeGroupId"],
+			))
+		
+		return(allStops)
 
+	
+	def getSystemAlerts(
+		self,
+		appVersion = 1,
+		amount = 1,
+		routesAmount = 0
+	):
+		"""
+		Gets all system alerts for the selected system.
+		=========
+		systemSelected: system from which to get content
+		appVersion:
+			0: Error
+			>=1: Valid
+		"""
+		
+		
+		# Initialize & Send Request
+		url = BASE_URL+f"/goServices.php?getAlertMessages={appVersion}"
+		body = {
+			"systemSelected0" : str(self.id),
+			"amount" : amount,
+			"routesAmount":routesAmount
+		}
+		errorMsgs = sendApiRequest(url, body)
+		
+		# Handle Request Error
+		if(errorMsgs == None):
+			return(None)
+		
+		# Create SystemAlert Objects
+		allAlerts = []
+		for errorMsg in errorMsgs["msgs"]:
+			allAlerts.append(SystemAlert(
+				id = errorMsg["id"],
+				systemId = errorMsg["userId"],
+				system = self,
+				routeId = errorMsg["routeId"],
+				name = errorMsg["name"],
+				html = errorMsg["html"],
+				archive = errorMsg["archive"],
+				important = errorMsg["important"],
+				dateTimeCreated = errorMsg["created"],
+				dateTimeFrom = errorMsg["from"],
+				dateTimeTo = errorMsg["to"],
+				asPush = errorMsg["asPush"],
+				gtfs = errorMsg["gtfs"],
+				gtfsAlertCauseId = errorMsg["gtfsAlertCauseId"],
+				gtfsAlertEffectId = errorMsg["gtfsAlertEffectId"],
+				gtfsAlertUrl = errorMsg["gtfsAlertUrl"],
+				gtfsAlertHeaderText = errorMsg["gtfsAlertHeaderText"],
+				gtfsAlertDescriptionText = errorMsg["gtfsAlertDescriptionText"],
+				routeGroupId = errorMsg["routeGroupId"],
+				createdUtc = errorMsg["createdUtc"],
+				authorId = errorMsg["authorId"],
+				author = errorMsg["author"],
+				updated = errorMsg["updated"],
+				updateAuthorId = errorMsg["updateAuthorId"],
+				updateAuthor = errorMsg["updateAuthor"],
+				createdF = errorMsg["createdF"],
+				fromF = errorMsg["fromF"],
+				fromOk = errorMsg["fromOk"],
+				toOk = errorMsg["toOk"],
+			))
+		
+		return(allAlerts)
 
 def getSystems(
 	appVersion = 2,
@@ -175,116 +356,218 @@ def getSystems(
 	return(allSystems)
 
 
+def getSystemFromID(
+	id,
+	appVersion = 2,
+	sortMode = 1,
+) -> TransportationSystem:
+	
+	# Check Input Type
+	assert type(id) == int, "`id` must be of type int"
+	
+	# Check App Version Type
+	assert type(appVersion) == int, "`appVersion` must be of type int"
+	
+	# Check sort Mode Type
+	assert type(sortMode) == int, "`sortMode` must be of type int"
+	
+	systems = getSystems(appVersion,sortMode)
+	
+	for system in systems:
+		if system.id == id:
+			return system
+	return None
+
+
 def printAllSystemsMd(
 	includeHtmlBreaks = True
 ):
 	systems = getSystems()
 	
 	for system in systems:
-		print(f"- {system.name}{'<br/>' if includeHtmlBreaks else ''}")
+		print(f"- {system.name} (#{system.id}){'<br/>' if includeHtmlBreaks else ''}")
+
+
+### Routes ###
+
+class Route:
+	
+	def __init__(
+		self,
+		id: int,
+		groupId: int = None,
+		groupColor: str = None,
+		name: str = None,
+		shortName: str = None,
+		nameOrig: str = None,
+		fullname: str = None,
+		myid: int = None,
+		mapApp: bool = None,
+		archive: bool = None,
+		goPrefixRouteName: bool = None,
+		goShowSchedule: bool = None,
+		outdated: bool = None,
+		distance: int = None,
+		latitude: float = None,
+		longitude: float = None,
+		timezone: str = None,
+		serviceTime: str = None,
+		serviceTimeShort: str = None,
+		systemId: id = None,
+		system: TransportationSystem = None,
+		stops: list = None,
+		
+	):
+		self.id = id
+		self.groupId = groupId
+		self.groupColor = groupColor
+		self.name = name
+		self.shortName = shortName
+		self.nameOrig = nameOrig
+		self.fullname = fullname
+		self.myid = myid
+		self.mapApp = mapApp
+		self.archive = archive
+		self.goPrefixRouteName = goPrefixRouteName
+		self.goShowSchedule = goShowSchedule
+		self.outdated = outdated
+		self.distance = distance
+		self.latitude = latitude
+		self.longitude = longitude
+		self.serviceTime = serviceTime
+		self.serviceTimeShort = serviceTimeShort
+		self.systemId = systemId
+		self.system = system
+		self.stops = stops
+		
+		if self.stops is None:
+			self.stops = []
+	
+	def getStops(self):
+		"""
+		Gets the list of stops for this route and stores it as an argument
+		"""
+		...
+	
+
+
+### Stops ###
+
+class Stop:
+	
+	def __init__(
+		self,
+		id: int,
+		routeId: int = None,
+		systemId: int = None,
+		position: int = None,
+		name: str = None,
+		latitude: float = None,
+		longitude: float = None,
+		radius: int = None,
+		routeName: str = None,
+		routeShortname: str = None,
+		routeGroupId : int = None,
+		system : TransportationSystem = None,
+		route : Route = None,
+	):
+		self.id = id
+		self.routeId = routeId
+		self.systemId = systemId
+		self.position = position
+		self.name = name
+		self.latitude = latitude
+		self.longitude = longitude
+		self.radius = radius
+		self.routeName = routeName
+		self.routeShortname = routeShortname
+		self.routeGroupId = routeGroupId
+		self.system = system
+		self.route = route
+		
+	
+	def getRoute(self):
+		"""
+		Get the route object to which this route belongs.
+		"""
+		...
+	
+	def getSystem(self):
+		"""
+		Get the system object to which this route belongs.
+		"""
+		...
 
 
 
-def getAllRoutes(
-	systemSelected,
-	paramDigit = 1,
-	amount = 1
-):
-	"""
-	Obtains every route for the selected system.
-	=========
-	systemSelected: system from which to get content
-	paramDigit: does not affect content of response, only formatting
-	amount:
-		1: Returns all routes for given system
-		0: Not Valid, Gives Error
-		>=2: Returns all routes for given system in addition to unrelated routes. Exact methodology unsure.
-	"""
+### System Alerts ###
+
+class SystemAlert:
 	
-	
-	# Initialize & Send Request
-	url = BASE_URL+"/mapGetData.php?getRoutes="+str(paramDigit)
-	body = {
-			"systemSelected0" : str(systemSelected),
-			"amount" : amount
-			}
-	routes = sendApiRequest(url, body)
-	
-	# Handle Request Error
-	if(routes == None):
-		return(None)
-	
-	# Handle Differing Response Format
-	if "all" in routes:
-		routes = routes["all"]
-	
-	
-	return(routes)
+	def __init__(
+		self,
+		id: int,
+		systemId: int = None,
+		system: TransportationSystem = None,
+		routeId: int = None,
+		name: str = None,
+		html: str = None,
+		archive: bool = None,
+		important: bool = None,
+		dateTimeCreated: str = None,
+		dateTimeFrom: str = None,
+		dateTimeTo: str = None,
+		asPush: bool = None,
+		gtfs: bool = None,
+		gtfsAlertCauseId: id = None,
+		gtfsAlertEffectId: id = None,
+		gtfsAlertUrl: str = None,
+		gtfsAlertHeaderText: str = None,
+		gtfsAlertDescriptionText: str = None,
+		routeGroupId: int = None,
+		createdUtc: str = None,
+		authorId: int = None,
+		author: str = None,
+		updated: str = None,
+		updateAuthorId: int = None,
+		updateAuthor: str = None,
+		createdF: str = None,
+		fromF: str = None,
+		fromOk: bool = None,
+		toOk: bool = None,
+	):
+		self.id = id
+		self.systemId = systemId
+		self.system = system
+		self.routeId = routeId
+		self.name = name
+		self.html = html
+		self.archive = archive
+		self.important = important
+		self.dateTimeCreated = dateTimeCreated
+		self.dateTimeFrom = dateTimeFrom
+		self.dateTimeTo = dateTimeTo
+		self.asPush = asPush
+		self.gtfs = gtfs
+		self.gtfsAlertCauseId = gtfsAlertCauseId
+		self.gtfsAlertEffectId = gtfsAlertEffectId
+		self.gtfsAlertUrl = gtfsAlertUrl
+		self.gtfsAlertHeaderText = gtfsAlertHeaderText
+		self.gtfsAlertDescriptionText = gtfsAlertDescriptionText
+		self.routeGroupId = routeGroupId
+		self.createdUtc = createdUtc
+		self.authorId = authorId
+		self.author = author
+		self.updated = updated
+		self.updateAuthorId = updateAuthorId
+		self.updateAuthor = updateAuthor
+		self.createdF = createdF
+		self.fromF = fromF
+		self.fromOk = fromOk
+		self.toOk = toOk
+		
 
 
-def getAllStops(
-	systemSelected,
-	paramDigit = 2,
-	sA = 1,
-	debug = 0
-):
-	"""
-	Obtains all stop for the selected system.
-	=========
-	systemSelected: system from which to get content
-	paramDigit: No discernable change
-	sA:
-		0: error
-		1: Returns all stops for the given system
-		>=2: Returns unrelated stops as well
-	"""
-	
-	
-	# Initialize & Send Request
-	url = BASE_URL+"/mapGetData.php?getStops="+str(paramDigit)
-	body = {
-		"s0" : str(systemSelected),
-		"sA" : sA
-	}
-	stops = sendApiRequest(url, body)
-	
-	# Handle Request Error
-	if(stops == None):
-		return(None)
-	
-	return(stops)
-
-
-def getSystemAlerts(
-	systemSelected,
-	paramDigit = 1
-):
-	"""
-	Gets all system alerts for the selected system.
-	=========
-	systemSelected: system from which to get content
-	paramDigit:
-		0: Error
-		>=1: Valid
-	"""
-	
-	
-	# Initialize & Send Request
-	url = BASE_URL+"/goServices.php?getAlertMessages="+str(paramDigit)
-	body = {
-		"systemSelected0" : str(systemSelected),
-		"amount" : 1,
-		"routesAmount":0
-	}
-	errorMsg = sendApiRequest(url, body)
-	
-	
-	# Handle Request Error
-	if(errorMsg == None):
-		return(None)
-	
-	
-	return(errorMsg)
 
 
 def getBuses(
@@ -316,7 +599,8 @@ def getBuses(
 	return(buses)
 
 
-
+### Live Timings ###
+## Not Yet Supported! ##
 
 # Launch WebSocket
 def launchWS():

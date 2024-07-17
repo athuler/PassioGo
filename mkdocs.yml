@@ -7,7 +7,7 @@ site_author: Andrei Thüler
 
 nav:
   - Home: index.md
-  - Usage: usage.md
+  - Examples: examples.md
   - API Reference: api.md
   - Changelog: changelog.md
   
