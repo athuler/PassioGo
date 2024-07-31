@@ -18,6 +18,18 @@ The package is available to download using [pip](https://pypi.org/project/Passio
 pip install passiogo
 ```
 
+## Documentation
+
+Project documentation for the latest stable version is available at [passiogo.readthedocs.io](https://passiogo.readthedocs.io/). Documentation for other versions is available at [passiogo.readthedocs.io/en/X.X.X](https://passiogo.readthedocs.io/en/0.1.2/).
+
+The documentation is built using `mkdocs` and can be rebuilt using the following:
+
+```
+pip install -r docs/requirements.txt
+mkdocs serve
+```
+
+
 ## Usage
 
 ### Transportation System
@@ -158,19 +170,6 @@ alerts[0].__dict__
  'toOk': '1'}
 ```
 
-
-## Documentation
-
-Project documentation for the latest stable version is available at [passiogo.readthedocs.io](https://passiogo.readthedocs.io/). Documentation for other versions is available at [passiogo.readthedocs.io/en/X.X.X](https://passiogo.readthedocs.io/en/0.1.2/).
-
-The documentation is built using `mkdocs` and can be rebuilt using the following:
-
-```
-pip install -r docs/requirements.txt
-mkdocs serve
-```
-
-
 ## Changelog
 
 This project's changelog is available at [`CHANGELOG.md`](https://github.com/athuler/PassioGo/blob/main/CHANGELOG.md)
@@ -183,7 +182,9 @@ Found a bug? Have an idea for a new feature? Please [send it in as a GitHub issu
 
 ## Contributing
 
-Interested in contributing to this package? [Fork the repository](https://github.com/athuler/PassioGo/fork), make your edits, then open a pull request!
+Interested in contributing to this package? Check out [open issues](https://github.com/athuler/PassioGo/issues).
+
+When ready, [fork the repository](https://github.com/athuler/PassioGo/fork), make your edits, then open a pull request on the active development branch.
 
 
 ## All Transportation Systems Accessible By The API
