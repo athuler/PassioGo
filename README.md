@@ -20,6 +20,143 @@ pip install passiogo
 
 ## Usage
 
+### Transportation System
+
+Before doing anything, you will need a [`TransportationSystem`](api/#transportationsystem) object.
+
+If you know the `id` of the desired transportation system, you can obtain the object using `passiogo.getSystemFromID(id)`.
+
+```python
+system = passiogo.getSystemFromID(1068)
+```
+
+If you do not know the ID of your desired transportation system, you can find it [here](#all-transportation-systems-accessible-by-the-api) or with the following:
+
+```python
+system = passiogo.printAllSystemsMd()
+```
+
+```md
+- 3630 Peachtree (#951)<br/>
+- 5025 Apartments (#1634)<br/>
+- 725 Ponce (#1832)<br/>
+- Agnes Scott College (#1471)<br/>
+...
+```
+
+### Routes
+
+You can obtain all the routes for a given transportation system using `TransportationSystem.getRoutes()`:
+
+```python
+routes = system.getRoutes()
+```
+
+Here, `routes` is a list of [`Route`](api/#route) objects. We can look at how much information is available for each route.
+
+```python
+routes[0].__dict__
+```
+
+```
+{'id': '133007',
+ 'groupId': '5702',
+ 'groupColor': '#0000ff',
+ 'name': 'Apostolic',
+ 'shortName': 'AP',
+ 'nameOrig': 'Apostolic',
+ 'fullname': 'University of Chicago',
+ 'myid': '38729',
+ 'mapApp': '1',
+ 'archive': '0',
+ 'goPrefixRouteName': '1',
+ 'goShowSchedule': 1,
+ 'outdated': '0',
+ 'distance': 578,
+ 'latitude': '41.780867018',
+ 'longitude': '-87.592902254',
+ 'serviceTime': None,
+ 'serviceTimeShort': None,
+ 'systemId': 1068,
+ 'system': <passiogo.TransportationSystem at 0x24a77026a00>}
+```
+
+### Stops
+
+You can get all the stops within a given transportation system using `TransportationSystem.getStops()`:
+
+```python
+stops = system.getStops()
+```
+
+Here, `stops` is a list of [`Stop`](api/#stop) objects. We can look at how much information is available for each route.
+
+```python
+stops[0].__dict__
+```
+
+```
+{'id': '10103',
+ 'routesAndPositions': {'4009': [0]},
+ 'systemId': 1068,
+ 'name': 'Medical Stop',
+ 'latitude': 41.79668374,
+ 'longitude': -87.595753286,
+ 'radius': 36,
+ 'system': <passiogo.TransportationSystem at 0x24a77026850>}
+```
+
+If you only wish to get stops for a given route, you can use the `Route.getStops()` method.
+
+```python
+stops = routes[0].getStops()
+```
+
+### System Alerts
+
+You can get all system alerts within a given transportation system with the `TransportationSystem.getSystemAlerts()`.
+
+```python
+alerts = system.getSystemAlerts()
+```
+
+Here, `alerts` is a list of [`SystemAlert`](api/#systemalert). We can look at how much information is available for each alert.
+
+```python
+alerts[0].__dict__
+```
+
+```
+{'id': '27535',
+ 'systemId': '1068',
+ 'system': <passiogo.TransportationSystem at 0x24a764e7a90>,
+ 'routeId': None,
+ 'name': 'Nightride Assistance Contact',
+ 'html': 'During the hours of 4 p.m. until 4 a.m., if you do not see arrival times or buses on route in the app, or experience any unusual event, please contact <b>773-573-7201</b> for assistance.',
+ 'archive': '0',
+ 'important': '1',
+ 'dateTimeCreated': '2024-04-09 09:43:10',
+ 'dateTimeFrom': '2024-04-09 15:40:44',
+ 'dateTimeTo': '2025-04-16 09:40:44',
+ 'asPush': '1',
+ 'gtfs': '1',
+ 'gtfsAlertCauseId': None,
+ 'gtfsAlertEffectId': None,
+ 'gtfsAlertUrl': None,
+ 'gtfsAlertHeaderText': 'Nightride Assistance Contact',
+ 'gtfsAlertDescriptionText': 'During the hours of 4 p.m. until 4 a.m., if you do not see arrival times or buses on route in the app, or experience any unusual event, please contact 773-573-7201 for assistance.',
+ 'routeGroupId': None,
+ 'createdUtc': '2024-04-09 14:43:10',
+ 'authorId': '1202',
+ 'author': 'John Appleseed (abc@domain.com)',
+ 'updated': '2024-07-17 16:12:02',
+ 'updateAuthorId': '1217',
+ 'updateAuthor': 'Mark Appleseed (def@domain.com)',
+ 'createdF': 'Tuesday, April 9th, 2024 3:40 PM',
+ 'fromF': 'Tuesday, April 9th, 2024 3:40 PM',
+ 'fromOk': '1',
+ 'toOk': '1'}
+```
 
 
 ## Documentation
