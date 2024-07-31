@@ -154,9 +154,7 @@ class TransportationSystem:
 			routes = routes["all"]
 		
 		allRoutes = []
-		#print(routes)
 		for digit, route in routes.items():
-			print(route)
 			possibleKeys = ["id", "groupId", "groupColor", "name", "shortName", "nameOrig", "fullname", "myid", "mapApp", "archive", "goPrefixRouteName", "goShowSchedule", "outdated", "distance", "latitude", "longitude", "timezone", "serviceTime", "serviceTimeShort"]
 			
 			for possibleKey in possibleKeys:
@@ -473,9 +471,17 @@ class Route:
 		"""
 		Gets the list of stops for this route and stores it as an argument
 		"""
+		stopsForRoute = []
+		allStops = self.system.getStops()
 		
+		for stop in allStops:
+			if \
+				self.myid in list(stop.routesAndPositions.keys()) or \
+				self.id in list(stop.routesAndPositions.keys()) or \
+				self.groupId in list(stop.routesAndPositions.keys()):
+				stopsForRoute.append(stop)
 		
-		return(...)
+		return(stopsForRoute)
 
 ### Stops ###
 
