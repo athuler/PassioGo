@@ -66,6 +66,23 @@ passiogo.getSystemFromID(1068)
 - **goSharedCode** (*int*): Unknown
 - **goAuthenticationType** (*bool*): Unknown
 
+```json
+{'id': 1068,
+ 'name': 'University of Chicago',
+ 'username': 'chicago',
+ 'goAgencyName': 'University of Chicago',
+ 'email': 'bus@uchicago.edu',
+ 'goTestMode': False,
+ 'name2': False,
+ 'homepage': 'https://safety-security.uchicago.edu/en/transportation',
+ 'logo': True,
+ 'goRoutePlannerEnabled': False,
+ 'goColor': '#843c39',
+ 'goSupportEmail': 'bus@uchicago.edu',
+ 'goSharedCode': 1312,
+ 'goAuthenticationType': False}
+```
+
 ### `TransportationSystem.getRoutes()`
 
 Get all routes for the appropriate system.
@@ -181,12 +198,50 @@ passiogo.getSystemFromID(1068).getSystemAlerts()
 - **systemId** (*int*): ID of the transportation system
 - **system** (*[`TransportationSystem`](#transportationsystem)*): transportation system object
 
+```json
+{'id': '133007',
+ 'groupId': '5702',
+ 'groupColor': '#0000ff',
+ 'name': 'Apostolic',
+ 'shortName': 'AP',
+ 'nameOrig': 'Apostolic',
+ 'fullname': 'University of Chicago',
+ 'myid': '38729',
+ 'mapApp': '1',
+ 'archive': '0',
+ 'goPrefixRouteName': '1',
+ 'goShowSchedule': 1,
+ 'outdated': '1',
+ 'distance': 578,
+ 'latitude': '41.780867018',
+ 'longitude': '-87.592902254',
+ 'serviceTime': 'is not provided: no bus on the route',
+ 'serviceTimeShort': 'No bus in service',
+ 'systemId': 1068,
+ 'system': <passiogo.TransportationSystem at 0x1d62db57c10>}
+```
+
 ### `Route.getStops()`
 
 Gets the list of stops for this route and stores it as an argument
 
 **Output**: *List* of [`Stop`](#stop)
 
+```python
+passiogo.getSystemFromID(1068).getRoutes()[0].getStops()
+```
+
+```
+[<passiogo.Stop at 0x24a762ad250>,
+ <passiogo.Stop at 0x24a762ada60>,
+ <passiogo.Stop at 0x24a762ad850>,
+ <passiogo.Stop at 0x24a762ad0d0>,
+ <passiogo.Stop at 0x24a762ad2b0>,
+ <passiogo.Stop at 0x24a75deabe0>,
+ <passiogo.Stop at 0x24a75deae80>,
+ <passiogo.Stop at 0x24a75dea790>,
+ <passiogo.Stop at 0x24a75dead60>]
+```
 
 ## `Stop`
 
@@ -194,8 +249,8 @@ Gets the list of stops for this route and stores it as an argument
 
 **id** is the only required parameter, all other default to *None*.
 
-- **id** (*int*): ID of the stop
-- **routeId** (*int*): ID of the route
+- **id** (*str*): ID of the stop
+- **routeId** (*str*): ID of the route
 - **systemId** (*int*): ID of the transportation system
 - **position** (*int*): Unknown
 - **name** (*str*): Name of the stop
@@ -207,6 +262,17 @@ Gets the list of stops for this route and stores it as an argument
 - **routeGroupId** (*int*): Unknown
 - **system** (*[`TransportationSystem`](#transportationsystem)*): Transportation system object
 - **route** (*[`Route`](#route)*): Route object
+
+```json
+{'id': '8611',
+ 'routesAndPositions': {'38728': [0, 7], '38730': [7]},
+ 'systemId': 1068,
+ 'name': 'Drexel Garage',
+ 'latitude': 41.784433,
+ 'longitude': -87.604445,
+ 'radius': 75,
+ 'system': <passiogo.TransportationSystem at 0x24a7681b670>}
+```
 
 
 ## `SystemAlert`
