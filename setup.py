@@ -8,7 +8,7 @@ with open("requirements.txt", "r") as fh:
 
 setup(
 	name='PassioGo',
-	version="0.1.2",
+	version="0.2.0",
 	description="An unofficial API for Passio Go",
 	long_description=long_description,
 	long_description_content_type='text/markdown',
@@ -21,7 +21,7 @@ setup(
 	project_urls = {
 		'Documentation': 'https://passiogo.readthedocs.io/',
 		'GitHub': 'https://github.com/athuler/PassioGo',
-		'Support':'https://github.com/sponsors/athuler',
+		'Sponsor':'https://github.com/sponsors/athuler',
 		'Changelog':'https://github.com/athuler/PassioGo/blob/main/CHANGELOG.md',
 	},
 )

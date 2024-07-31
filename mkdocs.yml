@@ -7,7 +7,7 @@ site_author: Andrei Thüler
 
 nav:
   - Home: index.md
-  - Usage: usage.md
+#  - Examples: examples.md
   - API Reference: api.md
   - Changelog: changelog.md
   
@@ -16,3 +16,6 @@ nav:
 markdown_extensions:
   - markdown_include.include:
       base_path: .
+
+watch:
+    - README.md
