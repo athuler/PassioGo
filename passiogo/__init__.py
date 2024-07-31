@@ -18,9 +18,12 @@ def sendApiRequest(url, body):
 	# Send Request
 	response = requests.post(url, json = body)
 	
-	
-	# Handle JSON Response
-	response = response.json()
+	try:
+		# Handle JSON Response
+		response = response.json()
+	except Exception as e:
+		raise Exception(f"Error converting API response to JSON! Here is the response received: {response}")
+		return None
 	
 	
 	# Handle API Error
@@ -74,7 +77,7 @@ class TransportationSystem:
 		
 		self.checkTypes()
 	
-	def checkTypes(self) -> None:
+	def checkTypes(self):
 		# id : int
 		assert type(self.id) == int, f"'id' parameter must be an int not {type(self.id)}"
 		
@@ -121,7 +124,7 @@ class TransportationSystem:
 		self,
 		appVersion = 1,
 		amount = 1
-	):
+	) -> list["Route"]:
 		"""
 		Obtains every route for the selected system.
 		=========
@@ -188,12 +191,13 @@ class TransportationSystem:
 	def getStops(
 		self,
 		appVersion = 2,
-		sA = 1
-	):
+		sA = 1,
+		raw = False
+	) -> list["Stop"]:
 		"""
 		Obtains all stop for the given system.
 		=========
-		appVersion: No discernable change
+		appVersion: No discernible change
 		sA:
 			0: error
 			1: Returns all stops for the given system
@@ -213,32 +217,57 @@ class TransportationSystem:
 		if(stops == None):
 			return(None)
 		
-		# Create Stop Objects
+		if raw:
+			return(stops)
+		
+		# Create Route & Stops Dictionary
+		# {routeid -> [stopid, stopid]}
+		routesAndStops = {}
+		for routeId, route in stops["routes"].items():
+			routesAndStops[routeId] = []
+			for stop in route[2:]:
+				if stop == 0:
+					continue
+				routesAndStops[routeId].append(stop[1])
+		
+		
+		# Create Each Stop Object
 		allStops = []
 		for id, stop in stops["stops"].items():
+			
+			# Create Route & Positions Dictionary
+			# {routeid -> [position]}
+			routesAndPositions = {}
+			for routeId in routesAndStops.keys():
+				if stop["id"] not in routesAndStops[routeId]:
+					continue
+				routesAndPositions[routeId] = [i for i,x in enumerate(routesAndStops[routeId]) if x == stop["id"]]
+			
+			
+			keys = ["userId", "radius"]
+			for key in keys:
+				if key not in stop:
+					stop[key] = None
+			
 			allStops.append(Stop(
-				id = stop["stopId"],
-				routeId = stop["routeId"],
+				id = stop["id"],
+				routesAndPositions = routesAndPositions,
 				systemId = stop["userId"],
-				position = stop["position"],
 				name = stop["name"],
 				latitude = stop["latitude"],
 				longitude = stop["longitude"],
 				radius = stop["radius"],
-				routeName = stop["routeName"],
-				routeShortname = stop["routeShortname"],
-				routeGroupId = stop["routeGroupId"],
+				system = self,
 			))
 		
 		return(allStops)
-
 	
 	def getSystemAlerts(
 		self,
 		appVersion = 1,
 		amount = 1,
 		routesAmount = 0
-	):
+	) -> list["SystemAlert"]:
 		"""
 		Gets all system alerts for the selected system.
 		=========
@@ -299,10 +328,11 @@ class TransportationSystem:
 		
 		return(allAlerts)
 
+
 def getSystems(
 	appVersion = 2,
 	sortMode = 1,
-) -> list[TransportationSystem]:
+) -> list["TransportationSystem"]:
 	'''
 	Gets all systems. Returns a list of TransportationSystem.
 	
@@ -415,8 +445,6 @@ class Route:
 		serviceTimeShort: str = None,
 		systemId: id = None,
 		system: TransportationSystem = None,
-		stops: list = None,
-		
 	):
 		self.id = id
 		self.groupId = groupId
@@ -438,18 +466,21 @@ class Route:
 		self.serviceTimeShort = serviceTimeShort
 		self.systemId = systemId
 		self.system = system
-		self.stops = stops
-		
-		if self.stops is None:
-			self.stops = []
+	
 	
 	def getStops(self):
 		"""
 		Gets the list of stops for this route and stores it as an argument
 		"""
-		...
-	
-
+		
+		allStops = self.system.getStops()
+		stopsOnRoute = []
+		
+		for stop in allStops:
+			if stop.routeId == self.myid:
+				stopsOnRoute.append(stop)
+		
+		return(stopsOnRoute)
 
 ### Stops ###
 
@@ -457,48 +488,28 @@ class Stop:
 	
 	def __init__(
 		self,
-		id: int,
-		routeId: int = None,
+		id: str,
+		routesAndPositions: dict = None,
 		systemId: int = None,
-		position: int = None,
 		name: str = None,
 		latitude: float = None,
 		longitude: float = None,
 		radius: int = None,
-		routeName: str = None,
-		routeShortname: str = None,
-		routeGroupId : int = None,
 		system : TransportationSystem = None,
-		route : Route = None,
 	):
+		if routesAndPositions is None:
+			routesAndPositions = {}
+		
 		self.id = id
-		self.routeId = routeId
+		self.routesAndPositions = routesAndPositions
 		self.systemId = systemId
-		self.position = position
 		self.name = name
 		self.latitude = latitude
 		self.longitude = longitude
 		self.radius = radius
-		self.routeName = routeName
-		self.routeShortname = routeShortname
-		self.routeGroupId = routeGroupId
 		self.system = system
-		self.route = route
-		
 	
-	def getRoute(self):
-		"""
-		Get the route object to which this route belongs.
-		"""
-		...
 	
-	def getSystem(self):
-		"""
-		Get the system object to which this route belongs.
-		"""
-		...
-
-
 
 ### System Alerts ###
 
@@ -565,7 +576,7 @@ class SystemAlert:
 		self.fromF = fromF
 		self.fromOk = fromOk
 		self.toOk = toOk
-		
+	
 
 
 
