@@ -38,7 +38,7 @@ def test_getAllStops(system):
 def test_getSystemAlerts(system):
 	system.getSystemAlerts()
 
-
-def test_getBuses():
-	passiogo.getBuses(1068)
+@pytest.mark.parametrize("system", pytest.allSystems, ids=ids)
+def test_getVehicles(system):
+	system.getVehicles()
 	

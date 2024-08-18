@@ -5,6 +5,10 @@
 
 ### Added
 
+- Testing for every transportation system
+- `Vehicle` object
+- `TransportationSystem.getVehicles()` which returns a list of `Vehicle` objects
+
 ### Changed
 
 - Fixed `AttributeError: 'list' object has no attribute 'items'` error thrown in `TransportationSystem.getRoutes()`
