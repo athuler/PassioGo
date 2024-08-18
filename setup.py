@@ -8,7 +8,7 @@ with open("requirements.txt", "r") as fh:
 
 setup(
 	name='PassioGo',
-	version="0.2.0",
+	version="0.2.1",
 	description="An unofficial API for Passio Go",
 	long_description=long_description,
 	long_description_content_type='text/markdown',

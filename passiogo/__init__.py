@@ -149,12 +149,13 @@ class TransportationSystem:
 		if(routes == None):
 			return(None)
 		
+		
 		# Handle Differing Response Format
 		if "all" in routes:
 			routes = routes["all"]
 		
 		allRoutes = []
-		for digit, route in routes.items():
+		for route in routes:
 			possibleKeys = ["id", "groupId", "groupColor", "name", "shortName", "nameOrig", "fullname", "myid", "mapApp", "archive", "goPrefixRouteName", "goShowSchedule", "outdated", "distance", "latitude", "longitude", "timezone", "serviceTime", "serviceTimeShort"]
 			
 			for possibleKey in possibleKeys:
@@ -212,12 +213,22 @@ class TransportationSystem:
 		}
 		stops = sendApiRequest(url, body)
 		
+		# Return Raw Response
+		if raw:
+			return(stops)
+		
 		# Handle Request Error
 		if(stops == None):
 			return(None)
 		
-		if raw:
-			return(stops)
+		# Handle Empty Routes
+		if stops["routes"] == []:
+			stops["routes"] = {}
+		
+		# Handle Empty Stops
+		if stops["stops"] == []:
+			stops["stops"] = {}
+		
 		
 		# Create Route & Stops Dictionary
 		# {routeid -> [stopid, stopid]}
@@ -326,6 +337,65 @@ class TransportationSystem:
 			))
 		
 		return(allAlerts)
+
+	def getVehicles(
+		self,
+		appVersion = 2
+	) -> list["Vehicle"]:
+		"""
+		Gets all currently running buses.
+		=========
+		s0: system from which to get content
+		paramDigit:
+			0: Error
+			>=1: Valid
+		"""
+		
+		
+		# Initialize & Send Request
+		url = BASE_URL+"/mapGetData.php?getBuses="+str(appVersion)
+		body = {
+			"s0" : str(self.id),
+			"sA" : 1
+		}
+		vehicles = sendApiRequest(url, body)
+		
+		# Handle Request Error
+		if(vehicles == None):
+			return(None)
+		
+		allVehicles = []
+		for vehicleId, vehicle in vehicles["buses"].items():
+			if vehicleId == '-1':
+				continue
+			
+			vehicle = vehicle[0]
+			
+			for key in ["busId", "busName", "busType", "calculatedCourse", "routeId", "route", "color", "created", "latitude", "longitude", "speed", "paxLoad100", "outOfService", "more", "tripId"]:
+				if key not in vehicle:
+					vehicle[key] = None
+			
+			
+			allVehicles.append(Vehicle(
+				id = vehicle["busId"],
+				name = vehicle["busName"],
+				type = vehicle["busType"],
+				system = self,
+				calculatedCourse = vehicle["calculatedCourse"],
+				routeId = vehicle["routeId"],
+				routeName = vehicle["route"],
+				color = vehicle["color"],
+				created = vehicle["created"],
+				latitude = vehicle["latitude"],
+				longitude = vehicle["longitude"],
+				speed = vehicle["speed"],
+				paxLoad = vehicle["paxLoad100"],
+				outOfService = vehicle["outOfService"],
+				more = vehicle["more"],
+				tripId = vehicle["tripId"],
+			))
+		
+		return(allVehicles)
 
 
 def getSystems(
@@ -483,6 +553,7 @@ class Route:
 		
 		return(stopsForRoute)
 
+
 ### Stops ###
 
 class Stop:
@@ -509,7 +580,6 @@ class Stop:
 		self.longitude = longitude
 		self.radius = radius
 		self.system = system
-	
 	
 
 ### System Alerts ###
@@ -577,38 +647,49 @@ class SystemAlert:
 		self.fromF = fromF
 		self.fromOk = fromOk
 		self.toOk = toOk
-	
 
 
 
+### Vehicles ###
 
-def getBuses(
-	systemSelected,
-	paramDigit = 2
-):
-	"""
-	Gets all currently running buses.
-	=========
-	s0: system from which to get content
-	paramDigit:
-		0: Error
-		>=1: Valid
-	"""
-	
-	
-	# Initialize & Send Request
-	url = BASE_URL+"/mapGetData.php?getBuses="+str(paramDigit)
-	body = {
-		"s0" : str(systemSelected),
-		"sA" : 1
-	}
-	buses = sendApiRequest(url, body)
-	
-	# Handle Request Error
-	if(buses == None):
-		return(None)
-	
-	return(buses)
+class Vehicle:
+
+	def __init__(
+		self,
+		id: str = None,
+		name: str = None,
+		type: str = None,
+		system: TransportationSystem = None,
+		calculatedCourse: int = None,
+		routeId: str = None,
+		routeName: str = None,
+		color: str = None,
+		created: str = None,
+		latitude: float = None,
+		longitude: float = None,
+		speed: float = None,
+		paxLoad: float = None,
+		outOfService: bool = None,
+		more: str = None,
+		tripId: str = None,
+	):
+		self.id = id
+		self.name = name
+		self.type = type
+		self.system = system
+		self.calculatedCourse = calculatedCourse
+		self.routeId = routeId
+		self.routeName = routeName
+		self.color = color
+		self.created = created
+		self.longitude = latitude
+		self.speed = speed
+		self.paxLoad = paxLoad
+		self.outOfService = outOfService
+		self.more = more
+		self.tripId = tripId
+
+
 
 
 ### Live Timings ###
@@ -634,17 +715,16 @@ def launchWS():
 	
 	
 def handleWsError(wsapp, error):
-	vars.errors.append(f"->WebSocketError: {error}")
+	...
 
 
 def handleWsClose(wsapp, close_status_code, close_msg):
 	wsapp.close()
-	vars.logs.append("Closing WebSocket")
 
 
 def subscribeWS(
 	wsapp,
-	userId = 1068
+	userId
 ):
 	
 	subscriptionMsg = {
