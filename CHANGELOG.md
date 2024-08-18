@@ -1,6 +1,17 @@
 # Changelog
 
 
+## 0.2.1 (Unreleased)
+
+### Added
+
+### Changed
+
+- Fixed `AttributeError: 'list' object has no attribute 'items'` error thrown in `TransportationSystem.getRoutes()`
+
+### Removed
+
+
 ## 0.2.0 (2024-07-31)
 
 ### Added

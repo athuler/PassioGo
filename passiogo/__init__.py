@@ -149,12 +149,13 @@ class TransportationSystem:
 		if(routes == None):
 			return(None)
 		
+		
 		# Handle Differing Response Format
 		if "all" in routes:
 			routes = routes["all"]
 		
 		allRoutes = []
-		for digit, route in routes.items():
+		for route in routes:
 			possibleKeys = ["id", "groupId", "groupColor", "name", "shortName", "nameOrig", "fullname", "myid", "mapApp", "archive", "goPrefixRouteName", "goShowSchedule", "outdated", "distance", "latitude", "longitude", "timezone", "serviceTime", "serviceTimeShort"]
 			
 			for possibleKey in possibleKeys:
@@ -634,12 +635,12 @@ def launchWS():
 	
 	
 def handleWsError(wsapp, error):
-	vars.errors.append(f"->WebSocketError: {error}")
+	...
 
 
 def handleWsClose(wsapp, close_status_code, close_msg):
 	wsapp.close()
-	vars.logs.append("Closing WebSocket")
+	...
 
 
 def subscribeWS(
