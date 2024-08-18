@@ -170,6 +170,33 @@ passiogo.getSystemFromID(1068).getSystemAlerts()
  <passiogo.SystemAlert at 0x1d62dbe0490>]
 ```
 
+
+### `TransportationSystem.getVehicles()`
+
+Gets all alerts for the corresponding transportation system.
+
+**Inputs**:
+
+- **appVersion** (*int*): Version of the application (Default: 1)
+
+
+**Output**: *List* of [`Vehicle`](#vehicle)
+
+```python
+passiogo.getSystemFromID(1068).getVehicles()
+```
+
+```
+[<passiogo.Vehicle at 0x21b59af8d00>,
+ <passiogo.Vehicle at 0x21b59af8f70>,
+ <passiogo.Vehicle at 0x21b59af8d90>,
+ <passiogo.Vehicle at 0x21b59af8370>,
+ ...
+ <passiogo.Vehicle at 0x21b597bfd90>,
+ <passiogo.Vehicle at 0x21b597bfbe0>,
+ <passiogo.Vehicle at 0x21b597bff10>]
+```
+
 ## `Route`
 
 ### `Route.__init__()`
@@ -341,6 +368,48 @@ passiogo.getSystemFromID(1068).getRoutes()[0].getStops()
  'fromF': 'Friday, July 12th, 2024 6:10 AM',
  'fromOk': '1',
  'toOk': '1'}
+```
+
+## `Vehicle`
+
+### `Vehicle.__init__()`
+
+All attributes default to **None**.
+
+- **id** (*str*): ID of the vehicle
+- **name** (*str*): Name of the vehicle
+- **type** (*str*): Type of the vehicle
+- **system** (*[`TransportationSystem`](#transportationsystem)*): Type of the vehicle
+- **calculatedCourse** (*int*): Unknown
+- **routeId** (*str*): ID of the route the vehicle is part of
+- **routeName** (*str*): Name of the route the vehicle is part of
+- **color** (*str*): Color in which the vehicle/route is displayed
+- **created** (*str*): When the vehicle was created
+- **latitude** (*float*): Current latitude of the vehicle
+- **longitude** (*float*): Current longitude of the vehicle
+- **speed** (*float*): Current speed of the vehicle
+- **paxLoad** (*float*): Current number of passengers on board
+- **outOfService** (*bool*): Whether the vehicle is currently in service
+- **more** (*str*): Unknown
+- **tripId** (*str*): Unknown
+
+
+```python
+{'id': '7998',
+ 'name': '7998 (CTA)',
+ 'type': 'bus',
+ 'system': <passiogo.TransportationSystem at 0x21b59b13460>,
+ 'calculatedCourse': '0',
+ 'routeId': 'cta4',
+ 'routeName': 'Cottage Grove (CTA) (CTA)',
+ 'color': '#565a5c',
+ 'created': '20240818 11:13',
+ 'longitude': 41.6861457824707,
+ 'speed': None,
+ 'paxLoad': 0,
+ 'outOfService': None,
+ 'more': None,
+ 'tripId': None}
 ```
 
 ## `printAllSystemsMd()`

@@ -340,7 +340,7 @@ class TransportationSystem:
 
 	def getVehicles(
 		self,
-		paramDigit = 2
+		appVersion = 2
 	) -> list["Vehicle"]:
 		"""
 		Gets all currently running buses.
@@ -353,7 +353,7 @@ class TransportationSystem:
 		
 		
 		# Initialize & Send Request
-		url = BASE_URL+"/mapGetData.php?getBuses="+str(paramDigit)
+		url = BASE_URL+"/mapGetData.php?getBuses="+str(appVersion)
 		body = {
 			"s0" : str(self.id),
 			"sA" : 1
@@ -669,7 +669,7 @@ class Vehicle:
 		longitude: float = None,
 		speed: float = None,
 		paxLoad: float = None,
-		outOfService: int = None,
+		outOfService: bool = None,
 		more: str = None,
 		tripId: str = None,
 	):
