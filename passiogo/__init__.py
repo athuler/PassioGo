@@ -213,12 +213,22 @@ class TransportationSystem:
 		}
 		stops = sendApiRequest(url, body)
 		
+		# Return Raw Response
+		if raw:
+			return(stops)
+		
 		# Handle Request Error
 		if(stops == None):
 			return(None)
 		
-		if raw:
-			return(stops)
+		# Handle Empty Routes
+		if stops["routes"] == []:
+			stops["routes"] = {}
+		
+		# Handle Empty Stops
+		if stops["stops"] == []:
+			stops["stops"] = {}
+		
 		
 		# Create Route & Stops Dictionary
 		# {routeid -> [stopid, stopid]}
