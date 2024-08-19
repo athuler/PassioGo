@@ -211,7 +211,7 @@ class TransportationSystem:
 		self,
 		appVersion = 2,
 		sA = 1,
-		raw = False
+		raw = False,
 	) -> list["Stop"]:
 		"""
 		Obtains all stop for the given system.
@@ -290,6 +290,27 @@ class TransportationSystem:
 			))
 		
 		return(allStops)
+	
+	def getStopById(
+		self,
+		stopId: str,
+		appVersion = 2,
+		sA = 1,
+		raw = False,
+	) -> "Stop":
+		"""
+		Returns the Stop object corresponding to the passed ID.
+		"""
+		allStops = self.getStops(
+			appVersion = appVersion,
+			sA = sA,
+			raw = raw,
+		)
+		
+		for stop in allStops:
+			if str(stop.id) == str(stopId):
+				return stop
+		return None
 	
 	def getSystemAlerts(
 		self,

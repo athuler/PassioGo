@@ -31,6 +31,9 @@ def test_getRouteById():
 def test_getAllRoutes(system):
 	system.getRoutes()
 
+def test_getStopById():
+	testSystem.getStopById(140059)
+	pass
 
 @pytest.mark.parametrize("system", pytest.allSystems, ids=ids)
 def test_getAllStops(system):

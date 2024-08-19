@@ -6,6 +6,7 @@
 ### Added
 
 - `TransportationSystem.getRouteById()` method to get a Route object by its ID
+- `TransportationSystem.getStopById()` method to get a Stop object by its ID
 
 ### Changed
 

@@ -21,7 +21,7 @@ pip install passiogo
 
 ## Documentation
 
-Project documentation for the latest stable version is available at [passiogo.readthedocs.io](https://passiogo.readthedocs.io/). Documentation for other versions is available at [passiogo.readthedocs.io/en/X.X.X](https://passiogo.readthedocs.io/en/0.1.2/).
+Project documentation for the latest stable version is available at [passiogo.readthedocs.io](https://passiogo.readthedocs.io/). Documentation for other versions is available at [passiogo.readthedocs.io/en/X.X.X](https://passiogo.readthedocs.io/en/0.3.0/).
 
 The documentation is built using `mkdocs` and can be rebuilt using the following:
 
