@@ -188,6 +188,25 @@ class TransportationSystem:
 		
 		return(allRoutes)
 	
+	def getRouteById(
+		self,
+		routeId: str,
+		appVersion: int = 1,
+		amount: int = 1
+	) -> "Route":
+		"""
+		Returns a Route object corresponding to the provided ID.
+		"""
+		allRoutes = self.getRoutes(
+			appVersion = appVersion,
+			amount = amount
+		)
+		
+		for route in allRoutes:
+			if str(route.id) == str(routeId):
+				return route
+		return None
+	
 	def getStops(
 		self,
 		appVersion = 2,
@@ -493,7 +512,7 @@ class Route:
 	
 	def __init__(
 		self,
-		id: int,
+		id: str,
 		groupId: int = None,
 		groupColor: str = None,
 		name: str = None,

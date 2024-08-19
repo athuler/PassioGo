@@ -1,6 +1,19 @@
 # Changelog
 
 
+## 0.3.0 (Unreleased)
+
+### Added
+
+- `TransportationSystem.getRouteById()` method to get a Route object by its ID
+
+### Changed
+
+- `Route.id` is now handled as a string
+
+### Removed
+
+
 ## 0.2.1 (2024-08-18)
 
 ### Added
