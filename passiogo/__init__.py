@@ -429,27 +429,28 @@ def getSystems(
 		for parameter in system.keys():
 			if system[parameter] == '':
 				system[parameter] = None
-		try:
-			allSystems.append(TransportationSystem(
-				id = int(system["id"]),
-				name = system["fullname"],
-				username = system["username"],
-				goAgencyName = system["goAgencyName"],
-				email = system["email"],
-				goTestMode = bool(int(system["goTestMode"])),
-				name2 = bool(int(system["name2"])),
-				homepage = system["homepage"],
-				logo = bool(int(system["logo"])),
-				goRoutePlannerEnabled = bool(int(system["goRoutePlannerEnabled"])),
-				goColor = system["goColor"],
-				goSupportEmail = system["goSupportEmail"],
-				goSharedCode = toIntInclNone(system["goSharedCode"]),
-				goAuthenticationType = bool(int(system["goAuthenticationType"])),
-			))
-		except Exception as e:
-			print(e)
-			print(system)
-			return()
+		
+		# Check all keys exist
+		for key in ["goAgencyName", "email", "email", "goTestMode", "name2", "homepage", "logo", "goRoutePlannerEnabled", "goColor", "goSupportEmail", "goSharedCode", "goAuthenticationType"]:
+			if key not in system.keys():
+				system[key] = None
+		
+		allSystems.append(TransportationSystem(
+			id = int(system["id"]),
+			name = system["fullname"],
+			username = system["username"],
+			goAgencyName = system["goAgencyName"],
+			email = system["email"],
+			goTestMode = bool(int(system["goTestMode"])),
+			name2 = bool(int(system["name2"])),
+			homepage = system["homepage"],
+			logo = bool(int(system["logo"])),
+			goRoutePlannerEnabled = bool(int(system["goRoutePlannerEnabled"])),
+			goColor = system["goColor"],
+			goSupportEmail = system["goSupportEmail"],
+			goSharedCode = toIntInclNone(system["goSharedCode"]),
+			goAuthenticationType = bool(int(system["goAuthenticationType"])),
+		))
 	
 	
 	return(allSystems)
