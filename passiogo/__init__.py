@@ -1,4 +1,6 @@
 import json
+from typing import Optional
+
 import requests
 import websocket
 
@@ -8,9 +10,9 @@ BASE_URL = "https://passiogo.com"
 ### Helper Functions ###
 
 def toIntInclNone(toInt):
-	if toInt == None:
+	if toInt is None:
 		return toInt
-	return(int(toInt))
+	return int(toInt)
 
 	
 def sendApiRequest(url, body):
@@ -23,7 +25,6 @@ def sendApiRequest(url, body):
 		response = response.json()
 	except Exception as e:
 		raise Exception(f"Error converting API response to JSON! Here is the response received: {response}")
-		return None
 	
 	
 	# Handle API Error
@@ -33,7 +34,7 @@ def sendApiRequest(url, body):
 	):
 		raise Exception(f"Error in Response! Here is the received response: {response}")
 	
-	return(response)
+	return response
 
 
 
@@ -124,7 +125,7 @@ class TransportationSystem:
 		self,
 		appVersion = 1,
 		amount = 1
-	) -> list["Route"]:
+	) -> Optional[list["Route"]]:
 		"""
 		Obtains every route for the selected system.
 		=========
@@ -146,8 +147,8 @@ class TransportationSystem:
 		routes = sendApiRequest(url, body)
 		
 		# Handle Request Error
-		if(routes == None):
-			return(None)
+		if routes is None:
+			return None
 		
 		
 		# Handle Differing Response Format
@@ -186,14 +187,14 @@ class TransportationSystem:
 				system = self
 			))
 		
-		return(allRoutes)
+		return allRoutes
 	
 	def getStops(
 		self,
 		appVersion = 2,
 		sA = 1,
 		raw = False
-	) -> list["Stop"]:
+	) -> Optional[list["Stop"]]:
 		"""
 		Obtains all stop for the given system.
 		=========
@@ -215,18 +216,18 @@ class TransportationSystem:
 		
 		# Return Raw Response
 		if raw:
-			return(stops)
+			return stops
 		
 		# Handle Request Error
-		if(stops == None):
-			return(None)
+		if stops is None:
+			return None
 		
 		# Handle Empty Routes
-		if stops["routes"] == []:
+		if not stops["routes"]:
 			stops["routes"] = {}
 		
 		# Handle Empty Stops
-		if stops["stops"] == []:
+		if not stops["stops"]:
 			stops["stops"] = {}
 		
 		
@@ -270,14 +271,22 @@ class TransportationSystem:
 				system = self,
 			))
 		
-		return(allStops)
+		return allStops
+
+	def getStopById(self, stopId):
+		stops = self.getStops()
+		for stop in stops:
+			if int(stop.id) == stopId:
+				return stop
+
+		return None
 	
 	def getSystemAlerts(
 		self,
 		appVersion = 1,
 		amount = 1,
 		routesAmount = 0
-	) -> list["SystemAlert"]:
+	) -> Optional[list["SystemAlert"]]:
 		"""
 		Gets all system alerts for the selected system.
 		=========
@@ -298,8 +307,8 @@ class TransportationSystem:
 		errorMsgs = sendApiRequest(url, body)
 		
 		# Handle Request Error
-		if(errorMsgs == None):
-			return(None)
+		if errorMsgs is None:
+			return None
 		
 		# Create SystemAlert Objects
 		allAlerts = []
@@ -336,12 +345,12 @@ class TransportationSystem:
 				toOk = errorMsg["toOk"],
 			))
 		
-		return(allAlerts)
+		return allAlerts
 
 	def getVehicles(
 		self,
 		appVersion = 2
-	) -> list["Vehicle"]:
+	) -> Optional[list["Vehicle"]]:
 		"""
 		Gets all currently running buses.
 		=========
@@ -361,8 +370,8 @@ class TransportationSystem:
 		vehicles = sendApiRequest(url, body)
 		
 		# Handle Request Error
-		if(vehicles == None):
-			return(None)
+		if vehicles is None :
+			return None
 		
 		allVehicles = []
 		for vehicleId, vehicle in vehicles["buses"].items():
@@ -395,21 +404,21 @@ class TransportationSystem:
 				tripId = vehicle["tripId"],
 			))
 		
-		return(allVehicles)
+		return allVehicles
 
 
 def getSystems(
 	appVersion = 2,
 	sortMode = 1,
 ) -> list["TransportationSystem"]:
-	'''
+	"""
 	Gets all systems. Returns a list of TransportationSystem.
 	
 	sortMode: Unknown
 	appVersion:
 		<2: Error
 		2: Valid
-	'''
+	"""
 	
 	
 	# Initialize & Send Request
@@ -418,8 +427,8 @@ def getSystems(
 	
 	
 	# Handle Request Error
-	if(systems == None):
-		return([])
+	if systems is None:
+		return []
 	
 	
 	allSystems = []
@@ -453,14 +462,14 @@ def getSystems(
 		))
 	
 	
-	return(allSystems)
+	return allSystems
 
 
 def getSystemFromID(
 	id,
 	appVersion = 2,
 	sortMode = 1,
-) -> TransportationSystem:
+) -> Optional[TransportationSystem]:
 	
 	# Check Input Type
 	assert type(id) == int, "`id` must be of type int"
@@ -532,6 +541,7 @@ class Route:
 		self.distance = distance
 		self.latitude = latitude
 		self.longitude = longitude
+		self.timezone = timezone
 		self.serviceTime = serviceTime
 		self.serviceTimeShort = serviceTimeShort
 		self.systemId = systemId
@@ -552,8 +562,15 @@ class Route:
 				self.groupId in list(stop.routesAndPositions.keys()):
 				stopsForRoute.append(stop)
 		
-		return(stopsForRoute)
+		return stopsForRoute
 
+	def getStopById(self, stopId):
+		stopsForRoute = self.getStops()
+
+		for stop in stopsForRoute:
+			if stop.id == stopId:
+				return stop
+		return None
 
 ### Stops ###
 
@@ -683,7 +700,8 @@ class Vehicle:
 		self.routeName = routeName
 		self.color = color
 		self.created = created
-		self.longitude = latitude
+		self.latitude = latitude
+		self.longitude = longitude
 		self.speed = speed
 		self.paxLoad = paxLoad
 		self.outOfService = outOfService
@@ -705,7 +723,7 @@ def launchWS():
 	wsapp = websocket.WebSocketApp(
 		uri,
 		on_open = subscribeWS,
-		#on_message = ...,
+		on_message = on_message,
 		on_error = handleWsError,
 		on_close = handleWsClose
 	)
@@ -722,19 +740,26 @@ def handleWsError(wsapp, error):
 def handleWsClose(wsapp, close_status_code, close_msg):
 	wsapp.close()
 
+def on_message(wsapp, message):
+	# print(message)
+	message = json.loads(message)
+	print(f'{message["routeBlock"]}({message["busId"]}) stopping {getSystemFromID(4006).getStopById(message["stopId"]).__dict__["name"]}. Lat: {message["latitude"]}, Long: {message["longitude"]} at {message["speed"]} speed')
 
 def subscribeWS(
-	wsapp,
-	userId
+	wsapp
 ):
-	
+	#comment out field to see all options
 	subscriptionMsg = {
 		"subscribe":"location",
-		"userId":[userId],
+		"userId":["4006"],
 		"field":[
 			"busId",
+			"routeStopId",
+			"routeBlock",
+			"stopId",
 			"latitude",
 			"longitude",
+			"speed",
 			"course",
 			"paxLoad",
 			"more"
