@@ -191,7 +191,8 @@ class TransportationSystem:
 				systemId = int(route["userId"]),
 				system = self
 			))
-		
+
+		self.routes = allRoutes
 		return(allRoutes)
 	
 	def getStops(
@@ -277,7 +278,8 @@ class TransportationSystem:
 				radius = stop["radius"],
 				system = self,
 			))
-		
+
+		self.stops = allStops
 		return(allStops)
 	
 	def getSystemAlerts(
@@ -345,7 +347,8 @@ class TransportationSystem:
 				fromOk = errorMsg["fromOk"],
 				toOk = errorMsg["toOk"],
 			))
-		
+
+		self.alerts = allAlerts
 		return(allAlerts)
 
 	def getVehicles(
@@ -406,7 +409,8 @@ class TransportationSystem:
 				more = vehicle["more"],
 				tripId = vehicle["tripId"],
 			))
-		
+
+		self.vehicles = allVehicles
 		return(allVehicles)
 
 	def refresh(self):
@@ -575,7 +579,8 @@ class Route:
 				self.id in list(stop.routesAndPositions.keys()) or \
 				self.groupId in list(stop.routesAndPositions.keys()):
 				stopsForRoute.append(stop)
-		
+
+		self.stops = stopsForRoute
 		return(stopsForRoute)
 
 	def refresh(self):
