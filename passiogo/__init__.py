@@ -15,10 +15,12 @@ def toIntInclNone(toInt):
 	return int(toInt)
 
 	
-def sendApiRequest(url, body):
-	
+def sendApiRequest(url, body = None):
 	# Send Request
-	response = requests.post(url, json = body)
+	if body is None:
+		response = requests.get(url)
+	else:
+		response = requests.post(url, json = body)
 	
 	try:
 		# Handle JSON Response
@@ -75,6 +77,10 @@ class TransportationSystem:
 		self.goSupportEmail = goSupportEmail
 		self.goSharedCode = goSharedCode
 		self.goAuthenticationType = goAuthenticationType
+		self.routes = []
+		self.stops = []
+		self.alerts = []
+		self.vehicles = []
 		
 		self.checkTypes()
 	
@@ -137,7 +143,9 @@ class TransportationSystem:
 			>=2: Returns all routes for given system in addition to unrelated routes. Exact methodology unsure.
 		"""
 		
-		
+		if self.routes:
+			return self.routes
+
 		# Initialize & Send Request
 		url = BASE_URL+f"/mapGetData.php?getRoutes={appVersion}"
 		body = {
@@ -186,8 +194,19 @@ class TransportationSystem:
 				systemId = int(route["userId"]),
 				system = self
 			))
-		
+
+		self.routes = allRoutes
 		return allRoutes
+
+
+	def getRouteById(self, routeId):
+		routes = self.getRoutes()
+		for route in routes:
+			if int(route.myid) == int(routeId):
+				return route
+
+		return None
+
 	
 	def getStops(
 		self,
@@ -205,7 +224,9 @@ class TransportationSystem:
 			>=2: Returns unrelated stops as well
 		"""
 		
-		
+		if self.stops:
+			return self.stops
+
 		# Initialize & Send Request
 		url = BASE_URL+"/mapGetData.php?getStops="+str(appVersion)
 		body = {
@@ -262,6 +283,7 @@ class TransportationSystem:
 			
 			allStops.append(Stop(
 				id = stop["id"],
+				routeId = stop["routeId"],
 				routesAndPositions = routesAndPositions,
 				systemId = None if stop["userId"] is None else int(stop["userId"]),
 				name = stop["name"],
@@ -269,8 +291,10 @@ class TransportationSystem:
 				longitude = stop["longitude"],
 				radius = stop["radius"],
 				system = self,
+				route = self.getRouteById(stop["routeId"])
 			))
-		
+
+		self.stops = allStops
 		return allStops
 
 	def getStopById(self, stopId):
@@ -280,6 +304,7 @@ class TransportationSystem:
 				return stop
 
 		return None
+
 	
 	def getSystemAlerts(
 		self,
@@ -295,7 +320,9 @@ class TransportationSystem:
 			0: Error
 			>=1: Valid
 		"""
-		
+
+		if self.alerts:
+			return self.alerts
 		
 		# Initialize & Send Request
 		url = BASE_URL+f"/goServices.php?getAlertMessages={appVersion}"
@@ -344,7 +371,8 @@ class TransportationSystem:
 				fromOk = errorMsg["fromOk"],
 				toOk = errorMsg["toOk"],
 			))
-		
+
+		self.alerts = allAlerts
 		return allAlerts
 
 	def getVehicles(
@@ -359,7 +387,9 @@ class TransportationSystem:
 			0: Error
 			>=1: Valid
 		"""
-		
+
+		if self.vehicles:
+			return self.vehicles
 		
 		# Initialize & Send Request
 		url = BASE_URL+"/mapGetData.php?getBuses="+str(appVersion)
@@ -403,8 +433,24 @@ class TransportationSystem:
 				more = vehicle["more"],
 				tripId = vehicle["tripId"],
 			))
-		
+
+		self.vehicles = allVehicles
 		return allVehicles
+
+	def getVehicleById(self, vehicleId):
+		vehicles = self.getVehicles()
+		for vehicle in vehicles:
+			if int(vehicle.id) == vehicleId:
+				return vehicle
+
+		return None
+
+	def refresh(self):
+		self.routes, self.stops, self.alerts, self.vehicles = [], [], [], []
+		self.routes = self.getRoutes()
+		self.stops = self.getStops()
+		self.alerts = self.getSystemAlerts()
+		self.vehicles = self.getVehicles()
 
 
 def getSystems(
@@ -546,12 +592,18 @@ class Route:
 		self.serviceTimeShort = serviceTimeShort
 		self.systemId = systemId
 		self.system = system
+		self.stops = []
+		self.vehicles = []
 	
 	
 	def getStops(self):
 		"""
 		Gets the list of stops for this route and stores it as an argument
 		"""
+
+		if self.stops:
+			return self.stops
+
 		stopsForRoute = []
 		allStops = self.system.getStops()
 		
@@ -561,8 +613,20 @@ class Route:
 				self.id in list(stop.routesAndPositions.keys()) or \
 				self.groupId in list(stop.routesAndPositions.keys()):
 				stopsForRoute.append(stop)
-		
+
+		self.stops = stopsForRoute
 		return stopsForRoute
+
+
+	def getVehicles(self):
+		if self.vehicles:
+			return self.vehicles
+
+		vehiclesForSystem = self.system.getVehicles()
+		vehiclesForRoute = [vehicle for vehicle in vehiclesForSystem if int(vehicle.__dict__["routeId"]) == self.id]
+		self.vehicles = vehiclesForRoute
+		return vehiclesForRoute
+
 
 	def getStopById(self, stopId):
 		stopsForRoute = self.getStops()
@@ -572,6 +636,20 @@ class Route:
 				return stop
 		return None
 
+	def getVehicleById(self, vehicleId):
+		vehiclesForSystem = self.getVehicles()
+		for vehicle in vehiclesForSystem:
+			if vehicle.__dict__["id"] == vehicleId:
+				return vehicle
+		return None
+
+	def refresh(self):
+		self.stops, self.vehicles = [], []
+		self.stops = self.getStops()
+		self.vehicles = self.getVehicles()
+
+
+
 ### Stops ###
 
 class Stop:
@@ -579,6 +657,7 @@ class Stop:
 	def __init__(
 		self,
 		id: str,
+		routeId: str = None,
 		routesAndPositions: dict = None,
 		systemId: int = None,
 		name: str = None,
@@ -586,11 +665,13 @@ class Stop:
 		longitude: float = None,
 		radius: int = None,
 		system : TransportationSystem = None,
+		route: Route = None
 	):
 		if routesAndPositions is None:
 			routesAndPositions = {}
 		
 		self.id = id
+		self.routeId = routeId
 		self.routesAndPositions = routesAndPositions
 		self.systemId = systemId
 		self.name = name
@@ -598,6 +679,24 @@ class Stop:
 		self.longitude = longitude
 		self.radius = radius
 		self.system = system
+		self.route = route
+
+	def getNextVehicle(self):
+		etaUrl = f'https://store.transitstat.us/passio_go/{self.system.__dict__["username"]}'
+		data = sendApiRequest(etaUrl)
+		etas = self.getEtas()
+		return sorted(etas, key=lambda x : x[1])[0]
+
+	def getEtas(self):
+		etaUrl = f'https://store.transitstat.us/passio_go/{self.system.__dict__["username"]}'
+		data = sendApiRequest(etaUrl)
+		trains = []
+		for vehicle in self.system.getVehicles():
+			if vehicle.__dict__["name"] in data["trains"]:
+				for prediction in data["trains"][vehicle.__dict__["name"]]["predictions"]:
+					if prediction["stationID"] == str(self.id):
+						trains.append((self.system.getVehicleById(int(vehicle.__dict__["id"])), prediction["actualETA"]))
+		return trains
 	
 
 ### System Alerts ###
@@ -708,6 +807,27 @@ class Vehicle:
 		self.more = more
 		self.tripId = tripId
 
+	def getNextStop(self):
+		etaUrl = f'https://store.transitstat.us/passio_go/{self.system.__dict__["username"]}'
+		data = sendApiRequest(etaUrl)
+		if str(self.name) in data["trains"]:
+			info = data["trains"][str(self.name)]
+		else:
+			return None
+		return (self.system.getStopById(int(info["predictions"][0]["stationID"])), info["predictions"][0]["actualETA"])
+
+	def getEtas(self):
+		etaUrl = f'https://store.transitstat.us/passio_go/{self.system.__dict__["username"]}'
+		data = sendApiRequest(etaUrl)
+		if str(self.name) in data["trains"]:
+			info = data["trains"][str(self.name)]
+		else:
+			return None
+		etas = []
+		for prediction in info["predictions"]:
+			etas.append(((self.system.getStopById(int(prediction["stationID"]))), prediction["actualETA"]))
+		return etas
+
 
 
 
@@ -741,17 +861,19 @@ def handleWsClose(wsapp, close_status_code, close_msg):
 	wsapp.close()
 
 def on_message(wsapp, message):
-	# print(message)
 	message = json.loads(message)
-	print(f'{message["routeBlock"]}({message["busId"]}) stopping {getSystemFromID(4006).getStopById(message["stopId"]).__dict__["name"]}. Lat: {message["latitude"]}, Long: {message["longitude"]} at {message["speed"]} speed')
+	print(message)
+	#Pretty output
+	# print(f'{message["routeBlock"]}({message["busId"]}) stopping {getSystemFromID(...).getStopById(message["stopId"]).__dict__["name"]}. Lat: {message["latitude"]}, Long: {message["longitude"]} at {message["speed"]} speed')
 
 def subscribeWS(
-	wsapp
+	wsapp,
+	userId
 ):
 	#comment out field to see all options
 	subscriptionMsg = {
 		"subscribe":"location",
-		"userId":["4006"],
+		"userId":[userId],
 		"field":[
 			"busId",
 			"routeStopId",
