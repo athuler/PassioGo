@@ -692,17 +692,26 @@ class Stop:
 
 	def getNextVehicle(
 			self
-	) -> Tuple[float, Optional["Vehicle"]]:
+	) -> Optional[
+			Tuple[float, Optional["Vehicle"]]
+		]:
 		"""
 		Gets the next vehicle that will arrive to this stop
 		"""
 
 		etas = self.getEtas()
-		return sorted(etas, key=lambda x : x[1])[0]
+		if not etas:
+			return None
+
+		return sorted(etas, key=lambda x : x[0])[0]
 
 	def getEtas(
 			self
-	) -> List[Tuple[float, Optional["Vehicle"]]]:
+	) -> Optional[
+			List[
+				Tuple[float, Optional["Vehicle"]]
+			]
+		]:
 		"""
 		Returns a list of all vehicles that stop at this stop,
 		along with the Unix Timestamp of their arrival in the form:
@@ -711,13 +720,13 @@ class Stop:
 
 		etaUrl = f'{BASE_URL}/mapGetData.php?eta=3&deviceId={random.randint(10000000,99999999)}&stopIds={self.id}'
 		data = sendApiRequest(etaUrl)["ETAs"]
+		vehicles = []
 		if str(self.id) not in data:
-			return None
-		trains = []
+			return vehicles
 		for vehicle in data[str(self.id)]:
 			eta = convertToUnixEta(vehicle["secondsSpent"])
-			trains.append((eta, self.system.getVehicleById(int(vehicle["busId"]))))
-		return trains
+			vehicles.append((eta, self.system.getVehicleById(int(vehicle["busId"]))))
+		return vehicles
 	
 
 ### System Alerts ###
