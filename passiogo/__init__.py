@@ -96,10 +96,6 @@ class TransportationSystem:
 		self.goSupportEmail = goSupportEmail
 		self.goSharedCode = goSharedCode
 		self.goAuthenticationType = goAuthenticationType
-		self.routes = []
-		self.stops = []
-		self.alerts = []
-		self.vehicles = []
 		
 		self.checkTypes()
 	
@@ -161,9 +157,7 @@ class TransportationSystem:
 			0: Not Valid, Gives Error
 			>=2: Returns all routes for given system in addition to unrelated routes. Exact methodology unsure.
 		"""
-		
-		if self.routes:
-			return self.routes
+
 
 		# Initialize & Send Request
 		url = BASE_URL+f"/mapGetData.php?getRoutes={appVersion}"
@@ -214,7 +208,6 @@ class TransportationSystem:
 				system = self
 			))
 
-		self.routes = allRoutes
 		return allRoutes
 
 
@@ -242,9 +235,7 @@ class TransportationSystem:
 			1: Returns all stops for the given system
 			>=2: Returns unrelated stops as well
 		"""
-		
-		if self.stops:
-			return self.stops
+
 
 		# Initialize & Send Request
 		url = BASE_URL+"/mapGetData.php?getStops="+str(appVersion)
@@ -313,7 +304,6 @@ class TransportationSystem:
 				route = self.getRouteById(stop["routeId"])
 			))
 
-		self.stops = allStops
 		return allStops
 
 	def getStopById(self, stopId):
@@ -340,8 +330,6 @@ class TransportationSystem:
 			>=1: Valid
 		"""
 
-		if self.alerts:
-			return self.alerts
 		
 		# Initialize & Send Request
 		url = BASE_URL+f"/goServices.php?getAlertMessages={appVersion}"
@@ -391,7 +379,6 @@ class TransportationSystem:
 				toOk = errorMsg["toOk"],
 			))
 
-		self.alerts = allAlerts
 		return allAlerts
 
 	def getVehicles(
@@ -407,8 +394,6 @@ class TransportationSystem:
 			>=1: Valid
 		"""
 
-		if self.vehicles:
-			return self.vehicles
 		
 		# Initialize & Send Request
 		url = BASE_URL+"/mapGetData.php?getBuses="+str(appVersion)
@@ -453,7 +438,6 @@ class TransportationSystem:
 				tripId = vehicle["tripId"],
 			))
 
-		self.vehicles = allVehicles
 		return allVehicles
 
 	def getVehicleById(self, vehicleId):
@@ -463,13 +447,6 @@ class TransportationSystem:
 				return vehicle
 
 		return None
-
-	def refresh(self):
-		self.routes, self.stops, self.alerts, self.vehicles = [], [], [], []
-		self.routes = self.getRoutes()
-		self.stops = self.getStops()
-		self.alerts = self.getSystemAlerts()
-		self.vehicles = self.getVehicles()
 
 
 def getSystems(
@@ -611,17 +588,12 @@ class Route:
 		self.serviceTimeShort = serviceTimeShort
 		self.systemId = systemId
 		self.system = system
-		self.stops = []
-		self.vehicles = []
 	
 	
 	def getStops(self):
 		"""
 		Gets the list of stops for this route and stores it as an argument
 		"""
-
-		if self.stops:
-			return self.stops
 
 		stopsForRoute = []
 		allStops = self.system.getStops()
@@ -633,17 +605,13 @@ class Route:
 				self.groupId in list(stop.routesAndPositions.keys()):
 				stopsForRoute.append(stop)
 
-		self.stops = stopsForRoute
 		return stopsForRoute
 
 
 	def getVehicles(self):
-		if self.vehicles:
-			return self.vehicles
 
 		vehiclesForSystem = self.system.getVehicles()
 		vehiclesForRoute = [vehicle for vehicle in vehiclesForSystem if int(vehicle.__dict__["routeId"]) == self.id]
-		self.vehicles = vehiclesForRoute
 		return vehiclesForRoute
 
 
@@ -661,12 +629,6 @@ class Route:
 			if vehicle.__dict__["id"] == vehicleId:
 				return vehicle
 		return None
-
-	def refresh(self):
-		self.stops, self.vehicles = [], []
-		self.stops = self.getStops()
-		self.vehicles = self.getVehicles()
-
 
 
 ### Stops ###
