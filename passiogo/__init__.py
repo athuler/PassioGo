@@ -4,10 +4,7 @@ import websocket
 
 import random
 from datetime import timedelta, datetime, timezone
-from pytimeparse.timeparse import timeparse
-from typing import Optional
-
-
+from typing import Optional, List, Tuple
 
 BASE_URL = "https://passiogo.com"
 
@@ -19,20 +16,8 @@ def toIntInclNone(toInt):
 		return toInt
 	return int(toInt)
 
-#Needs refining based on different formats
-#Have to wait until I find a bus with eta >= 1 day
-def convertToUnix(eta):
-	if eta == '--':
-		return 0
-	elif eta == "arrived" or eta == "arriving":
-		return datetime.now(timezone.utc).timestamp()
-	elif "less than" in eta:
-		return (datetime.now(timezone.utc) + timedelta(seconds=30)).timestamp() #Approximation, may be a better way
-	elif "-" in eta:
-		eta=eta.split("-")[1]
-	"".join(eta.split())
-	seconds = timeparse(eta)
-	return (datetime.now(timezone.utc) + timedelta(seconds=seconds)).timestamp()
+def convertToUnixEta(eta):
+	return (datetime.now(timezone.utc) + timedelta(seconds=eta)).timestamp()
 
 def sendApiRequest(url, body = None):
 	# Send Request
@@ -210,22 +195,13 @@ class TransportationSystem:
 
 		return allRoutes
 
-
-	def getRouteById(self, routeId):
-		routes = self.getRoutes()
-		for route in routes:
-			if int(route.myid) == int(routeId):
-				return route
-
-		return None
-
 	
 	def getRouteById(
 		self,
 		routeId: str,
 		appVersion: int = 1,
 		amount: int = 1
-	) -> "Route":
+	) -> Optional["Route"]:
 		"""
 		Returns a Route object corresponding to the provided ID.
 		"""
@@ -312,7 +288,6 @@ class TransportationSystem:
 			
 			allStops.append(Stop(
 				id = stop["id"],
-				routeId = stop["routeId"],
 				routesAndPositions = routesAndPositions,
 				systemId = None if stop["userId"] is None else int(stop["userId"]),
 				name = stop["name"],
@@ -320,18 +295,9 @@ class TransportationSystem:
 				longitude = stop["longitude"],
 				radius = stop["radius"],
 				system = self,
-				route = self.getRouteById(stop["routeId"])
 			))
 
 		return allStops
-
-	def getStopById(self, stopId):
-		stops = self.getStops()
-		for stop in stops:
-			if int(stop.id) == stopId:
-				return stop
-
-		return None
 
 	
 	def getStopById(
@@ -340,7 +306,7 @@ class TransportationSystem:
 		appVersion = 2,
 		sA = 1,
 		raw = False,
-	) -> "Stop":
+	) -> Optional["Stop"]:
 		"""
 		Returns the Stop object corresponding to the passed ID.
 		"""
@@ -480,12 +446,19 @@ class TransportationSystem:
 
 		return allVehicles
 
-	def getVehicleById(self, vehicleId):
-		vehicles = self.getVehicles()
+	def getVehicleById(
+			self,
+			vehicleId,
+			appVersion: int = 1
+	) -> Optional["Vehicle"]:
+		"""
+		Returns a Vehicle object corresponding to the provided ID.
+		"""
+
+		vehicles = self.getVehicles(appVersion = appVersion)
 		for vehicle in vehicles:
 			if int(vehicle.id) == vehicleId:
 				return vehicle
-
 		return None
 
 
@@ -648,25 +621,44 @@ class Route:
 		return stopsForRoute
 
 
-	def getVehicles(self):
+	def getVehicles(
+			self,
+			appVersion: int = 1
+	) -> List["Vehicle"]:
+		"""
+		Gets all vehicles following this route
+		"""
 
-		vehiclesForSystem = self.system.getVehicles()
-		vehiclesForRoute = [vehicle for vehicle in vehiclesForSystem if int(vehicle.__dict__["routeId"]) == self.id]
+		vehiclesForSystem = self.system.getVehicles(appVersion = appVersion)
+		vehiclesForRoute = [vehicle for vehicle in vehiclesForSystem if str(vehicle.routeId) == self.myid]
 		return vehiclesForRoute
 
 
-	def getStopById(self, stopId):
-		stopsForRoute = self.getStops()
+	def getStopById(
+			self,
+			stopId: str
+	) -> Optional["Stop"]:
+		"""
+		Returns a Stop object corresponding to the provided ID.
+		"""
 
+		stopsForRoute = self.getStops()
 		for stop in stopsForRoute:
-			if stop.id == stopId:
+			if str(stop.id) == str(stopId):
 				return stop
 		return None
 
-	def getVehicleById(self, vehicleId):
+	def getVehicleById(
+			self,
+			vehicleId: str,
+	) -> Optional["Vehicle"]:
+		"""
+		Returns a Vehicle object corresponding to the provided ID.
+		"""
+
 		vehiclesForSystem = self.getVehicles()
 		for vehicle in vehiclesForSystem:
-			if vehicle.__dict__["id"] == vehicleId:
+			if str(vehicle.id) == str(vehicleId):
 				return vehicle
 		return None
 
@@ -678,7 +670,6 @@ class Stop:
 	def __init__(
 		self,
 		id: str,
-		routeId: str = None,
 		routesAndPositions: dict = None,
 		systemId: int = None,
 		name: str = None,
@@ -686,13 +677,11 @@ class Stop:
 		longitude: float = None,
 		radius: int = None,
 		system : TransportationSystem = None,
-		route: Route = None
 	):
 		if routesAndPositions is None:
 			routesAndPositions = {}
 		
 		self.id = id
-		self.routeId = routeId
 		self.routesAndPositions = routesAndPositions
 		self.systemId = systemId
 		self.name = name
@@ -700,25 +689,34 @@ class Stop:
 		self.longitude = longitude
 		self.radius = radius
 		self.system = system
-		self.route = route
 
-	def getNextVehicle(self):
+	def getNextVehicle(
+			self
+	) -> Tuple[float, Optional["Vehicle"]]:
+		"""
+		Gets the next vehicle that will arrive to this stop
+		"""
+
 		etas = self.getEtas()
 		return sorted(etas, key=lambda x : x[1])[0]
 
-	def getEtas(self):
-		etaUrl = f'https://passiogo.com/mapGetData.php?eta=3&deviceId={random.randint(10000000,99999999)}&stopIds={self.id}'
+	def getEtas(
+			self
+	) -> List[Tuple[float, Optional["Vehicle"]]]:
+		"""
+		Returns a list of all vehicles that stop at this stop,
+		along with the Unix Timestamp of their arrival in the form:
+		(unixTimestamp, <Vehicle>)
+		"""
+
+		etaUrl = f'{BASE_URL}/mapGetData.php?eta=3&deviceId={random.randint(10000000,99999999)}&stopIds={self.id}'
 		data = sendApiRequest(etaUrl)["ETAs"]
 		if str(self.id) not in data:
 			return None
 		trains = []
 		for vehicle in data[str(self.id)]:
-			eta = vehicle["eta"]
-			if eta == 'arrived':
-				eta = datetime.now(timezone.utc)
-			else:
-				eta = convertToUnix(eta)
-			trains.append((self.system.getVehicleById(int(vehicle["busId"])), eta))
+			eta = convertToUnixEta(vehicle["secondsSpent"])
+			trains.append((eta, self.system.getVehicleById(int(vehicle["busId"]))))
 		return trains
 	
 
@@ -829,25 +827,6 @@ class Vehicle:
 		self.outOfService = outOfService
 		self.more = more
 		self.tripId = tripId
-
-	def getNextStop(self):
-		sortedEta = sorted(self.getEtas(), key = lambda x:x[1])
-		if sortedEta:
-			return sortedEta[0]
-		return None
-
-
-	def getEtas(self):
-		etas = []
-		for stop in self.system.getRouteById(self.routeId).getStops():
-			etaUrl = f'https://passiogo.com/mapGetData.php?eta=3&deviceId={random.randint(10000000, 99999999)}&stopIds={stop.id}'
-			data = sendApiRequest(etaUrl)["ETAs"]
-			for vehicle in data[str(stop.id)]:
-				if vehicle["busId"] == self.id:
-					print(vehicle)
-					etas.append((stop, convertToUnix(vehicle["eta"])))
-		return etas
-
 
 
 ### Live Timings ###
