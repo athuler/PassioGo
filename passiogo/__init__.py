@@ -600,7 +600,7 @@ class SystemAlert:
 	
 	def __init__(
 		self,
-		id: int,
+		id: str,
 		systemId: int = None,
 		system: TransportationSystem = None,
 		routeId: int = None,
