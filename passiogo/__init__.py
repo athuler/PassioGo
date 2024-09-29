@@ -1,8 +1,13 @@
 import json
-from typing import Optional
-
 import requests
 import websocket
+
+import random
+from datetime import timedelta, datetime, timezone
+from pytimeparse.timeparse import timeparse
+from typing import Optional
+
+
 
 BASE_URL = "https://passiogo.com"
 
@@ -14,7 +19,21 @@ def toIntInclNone(toInt):
 		return toInt
 	return int(toInt)
 
-	
+#Needs refining based on different formats
+#Have to wait until I find a bus with eta >= 1 day
+def convertToUnix(eta):
+	if eta == '--':
+		return 0
+	elif eta == "arrived" or eta == "arriving":
+		return datetime.now(timezone.utc).timestamp()
+	elif "less than" in eta:
+		return (datetime.now(timezone.utc) + timedelta(seconds=30)).timestamp() #Approximation, may be a better way
+	elif "-" in eta:
+		eta=eta.split("-")[1]
+	"".join(eta.split())
+	seconds = timeparse(eta)
+	return (datetime.now(timezone.utc) + timedelta(seconds=seconds)).timestamp()
+
 def sendApiRequest(url, body = None):
 	# Send Request
 	if body is None:
@@ -682,20 +701,22 @@ class Stop:
 		self.route = route
 
 	def getNextVehicle(self):
-		etaUrl = f'https://store.transitstat.us/passio_go/{self.system.__dict__["username"]}'
-		data = sendApiRequest(etaUrl)
 		etas = self.getEtas()
 		return sorted(etas, key=lambda x : x[1])[0]
 
 	def getEtas(self):
-		etaUrl = f'https://store.transitstat.us/passio_go/{self.system.__dict__["username"]}'
-		data = sendApiRequest(etaUrl)
+		etaUrl = f'https://passiogo.com/mapGetData.php?eta=3&deviceId={random.randint(10000000,99999999)}&stopIds={self.id}'
+		data = sendApiRequest(etaUrl)["ETAs"]
+		if str(self.id) not in data:
+			return None
 		trains = []
-		for vehicle in self.system.getVehicles():
-			if vehicle.__dict__["name"] in data["trains"]:
-				for prediction in data["trains"][vehicle.__dict__["name"]]["predictions"]:
-					if prediction["stationID"] == str(self.id):
-						trains.append((self.system.getVehicleById(int(vehicle.__dict__["id"])), prediction["actualETA"]))
+		for vehicle in data[str(self.id)]:
+			eta = vehicle["eta"]
+			if eta == 'arrived':
+				eta = datetime.now(timezone.utc)
+			else:
+				eta = convertToUnix(eta)
+			trains.append((self.system.getVehicleById(int(vehicle["busId"])), eta))
 		return trains
 	
 
@@ -808,26 +829,22 @@ class Vehicle:
 		self.tripId = tripId
 
 	def getNextStop(self):
-		etaUrl = f'https://store.transitstat.us/passio_go/{self.system.__dict__["username"]}'
-		data = sendApiRequest(etaUrl)
-		if str(self.name) in data["trains"]:
-			info = data["trains"][str(self.name)]
-		else:
-			return None
-		return (self.system.getStopById(int(info["predictions"][0]["stationID"])), info["predictions"][0]["actualETA"])
+		sortedEta = sorted(self.getEtas(), key = lambda x:x[1])
+		if sortedEta:
+			return sortedEta[0]
+		return None
+
 
 	def getEtas(self):
-		etaUrl = f'https://store.transitstat.us/passio_go/{self.system.__dict__["username"]}'
-		data = sendApiRequest(etaUrl)
-		if str(self.name) in data["trains"]:
-			info = data["trains"][str(self.name)]
-		else:
-			return None
 		etas = []
-		for prediction in info["predictions"]:
-			etas.append(((self.system.getStopById(int(prediction["stationID"]))), prediction["actualETA"]))
+		for stop in self.system.getRouteById(self.routeId).getStops():
+			etaUrl = f'https://passiogo.com/mapGetData.php?eta=3&deviceId={random.randint(10000000, 99999999)}&stopIds={stop.id}'
+			data = sendApiRequest(etaUrl)["ETAs"]
+			for vehicle in data[str(stop.id)]:
+				if vehicle["busId"] == self.id:
+					print(vehicle)
+					etas.append((stop, convertToUnix(vehicle["eta"])))
 		return etas
-
 
 
 
