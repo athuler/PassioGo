@@ -526,7 +526,7 @@ class Route:
 		systemId: id = None,
 		system: TransportationSystem = None,
 	):
-		self.id = id
+		self.id = toIntInclNone(id)
 		self.groupId = toIntInclNone(groupId)
 		self.groupColor = groupColor
 		self.name = name
