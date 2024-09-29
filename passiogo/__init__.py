@@ -504,14 +504,14 @@ class Route:
 	
 	def __init__(
 		self,
-		id: str,
+		id: int,
 		groupId: int = None,
 		groupColor: str = None,
 		name: str = None,
 		shortName: str = None,
 		nameOrig: str = None,
 		fullname: str = None,
-		myid: int = None,
+		myid: str = None,
 		mapApp: bool = None,
 		archive: bool = None,
 		goPrefixRouteName: bool = None,
@@ -533,7 +533,7 @@ class Route:
 		self.shortName = shortName
 		self.nameOrig = nameOrig
 		self.fullname = fullname
-		self.myid = toIntInclNone(myid)
+		self.myid = myid
 		self.mapApp = bool(toIntInclNone(mapApp))
 		self.archive = bool(toIntInclNone(archive))
 		self.goPrefixRouteName = bool(toIntInclNone(goPrefixRouteName))
