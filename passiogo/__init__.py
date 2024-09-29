@@ -220,6 +220,25 @@ class TransportationSystem:
 		return None
 
 	
+	def getRouteById(
+		self,
+		routeId: str,
+		appVersion: int = 1,
+		amount: int = 1
+	) -> "Route":
+		"""
+		Returns a Route object corresponding to the provided ID.
+		"""
+		allRoutes = self.getRoutes(
+			appVersion = appVersion,
+			amount = amount
+		)
+		
+		for route in allRoutes:
+			if str(route.id) == str(routeId):
+				return route
+		return None
+	
 	def getStops(
 		self,
 		appVersion = 2,
@@ -314,6 +333,27 @@ class TransportationSystem:
 
 		return None
 
+	
+	def getStopById(
+		self,
+		stopId: str,
+		appVersion = 2,
+		sA = 1,
+		raw = False,
+	) -> "Stop":
+		"""
+		Returns the Stop object corresponding to the passed ID.
+		"""
+		allStops = self.getStops(
+			appVersion = appVersion,
+			sA = sA,
+			raw = raw,
+		)
+		
+		for stop in allStops:
+			if str(stop.id) == str(stopId):
+				return stop
+		return None
 	
 	def getSystemAlerts(
 		self,
@@ -545,7 +585,7 @@ class Route:
 	
 	def __init__(
 		self,
-		id: int,
+		id: str,
 		groupId: int = None,
 		groupColor: str = None,
 		name: str = None,
