@@ -15,6 +15,18 @@
 ### Removed
 
 
+## 0.2.2 (2024-09-10)
+
+### Added
+
+
+### Changed
+
+- Fixed key error while fetching systems. (#22)
+
+### Removed
+
+
 ## 0.2.1 (2024-08-18)
 
 ### Added
