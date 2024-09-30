@@ -691,7 +691,8 @@ class Stop:
 		self.system = system
 
 	def getNextVehicle(
-			self
+			self,
+			returnInUTC: bool = False,
 	) -> Optional[
 			Tuple[float, Optional["Vehicle"]]
 		]:
@@ -699,14 +700,15 @@ class Stop:
 		Gets the next vehicle that will arrive to this stop
 		"""
 
-		etas = self.getEtas()
+		etas = self.getEtas(returnInUTC = returnInUTC)
 		if not etas:
 			return None
 
-		return sorted(etas, key=lambda x : x[0])[0]
+		return sorted(etas, key = lambda x : x[0])[0]
 
 	def getEtas(
-			self
+			self,
+			returnInUTC: bool = False
 	) -> Optional[
 			List[
 				Tuple[float, Optional["Vehicle"]]
@@ -724,7 +726,10 @@ class Stop:
 		if str(self.id) not in data:
 			return vehicles
 		for vehicle in data[str(self.id)]:
-			eta = convertToUnixEta(vehicle["secondsSpent"])
+			if returnInUTC:
+				eta = convertToUnixEta(vehicle["secondsSpent"])
+			else:
+				eta = vehicle["secondsSpent"]
 			vehicles.append((eta, self.system.getVehicleById(int(vehicle["busId"]))))
 		return vehicles
 	
