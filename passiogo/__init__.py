@@ -716,8 +716,9 @@ class Stop:
 		]:
 		"""
 		Returns a list of all vehicles that stop at this stop,
-		along with the Unix Timestamp of their arrival in the form:
-		(unixTimestamp, <Vehicle>)
+		along with the seconds until their arrival in the form:
+		(seconds, <Vehicle>), or optionally (timestampUTC, <Vehicle>) with the
+		returnInUtc argument.
 		"""
 
 		etaUrl = f'{BASE_URL}/mapGetData.php?eta=3&deviceId={random.randint(10000000,99999999)}&stopIds={self.id}'
