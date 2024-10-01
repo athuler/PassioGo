@@ -118,6 +118,27 @@ passiogo.getSystemFromID(1068).getRoutes()
  <passiogo.Route at 0x1d62db3fca0>]
 ```
 
+### `TransportationSystem.getRouteById()`
+
+Get the route for the appropriate ID.
+
+**Input**:
+
+- **routeId** (*str*): ID of the desired route
+- **appVersion** (*int*): Version of the application (Default: 1)
+- **amount** (*int*): Unknown (Default: 1)
+
+**Output**: [`Route`](#route) or *None* if no match
+
+```python
+passiogo.getSystemFromID(1068).getRouteById(133007)
+```
+
+```
+<passiogo.Route at 0x1c26a30a1c0>
+```
+
+
 ### `TransportationSystem.getStops()`
 
 Gets all stops for the given transportation system.
@@ -145,6 +166,26 @@ passiogo.getSystemFromID(1068).getStops()
  <passiogo.Stop at 0x1d62d57bee0>,
  ...
  <passiogo.Stop at 0x1d62da5a700>]
+```
+
+### `TransportationSystem.getStopById()`
+
+Get the stop for the appropriate ID.
+
+**Input**:
+
+- **stopId** (*str*): ID of the desired stop
+- **appVersion** (*int*): Version of the application (Default: 1)
+- **sA** (*int*): Unknown (Default: 1)
+
+**Output**: [`Stop`](#stop) or *None* if no match
+
+```python
+passiogo.getSystemFromID(3499).getStopById(140059)
+```
+
+```
+<passiogo.Stop at 0x1c2690238e0>
 ```
 
 ### `TransportationSystem.getSystemAlerts()`
