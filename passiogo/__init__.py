@@ -709,7 +709,7 @@ class Stop:
 		if str(self.id) not in data:
 			return vehicles
 		for vehicle in data[str(self.id)]:
-			if vehicle["etaR"]: #etaR is "" when eta is unavailable
+			if "etaR" in vehicle and vehicle["etaR"]: #etaR is "" when eta is unavailable
 				if returnInUTC:
 					eta = convertToUnixEta(vehicle["secondsSpent"])
 				else:
