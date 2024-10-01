@@ -569,7 +569,7 @@ class Route:
 	
 	def __init__(
 		self,
-		id: str,
+		id: int,
 		groupId: int = None,
 		groupColor: str = None,
 		name: str = None,
