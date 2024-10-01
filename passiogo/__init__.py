@@ -704,7 +704,7 @@ class Stop:
 		if not etas:
 			return None
 
-		return sorted(etas, key = lambda x : x[0])[0]
+		return min(etas, key = lambda x : x[0])
 
 	def getEtas(
 			self,
