@@ -686,8 +686,7 @@ class Stop:
 		if not etas:
 			return None
 
-		# Generally operates in O(1) as etas come sorted by API
-		return min(etas, key = lambda x : x[0])
+		return etas[0]
 
 	def getEtas(
 			self,
@@ -715,7 +714,7 @@ class Stop:
 					eta = convertToUnixEta(vehicle["secondsSpent"])
 				else:
 					eta = vehicle["secondsSpent"]
-			vehicles.append((eta, self.system.getVehicleById(int(vehicle["busId"]))))
+				vehicles.append((eta, self.system.getVehicleById(int(vehicle["busId"]))))
 		return vehicles
 	
 
