@@ -634,35 +634,6 @@ class Route:
 		return vehiclesForRoute
 
 
-	def getStopById(
-			self,
-			stopId: str
-	) -> Optional["Stop"]:
-		"""
-		Returns a Stop object corresponding to the provided ID.
-		"""
-
-		stopsForRoute = self.getStops()
-		for stop in stopsForRoute:
-			if str(stop.id) == str(stopId):
-				return stop
-		return None
-
-	def getVehicleById(
-			self,
-			vehicleId: str,
-	) -> Optional["Vehicle"]:
-		"""
-		Returns a Vehicle object corresponding to the provided ID.
-		"""
-
-		vehiclesForSystem = self.getVehicles()
-		for vehicle in vehiclesForSystem:
-			if str(vehicle.id) == str(vehicleId):
-				return vehicle
-		return None
-
-
 ### Stops ###
 
 class Stop:
@@ -704,6 +675,7 @@ class Stop:
 		if not etas:
 			return None
 
+		# Generally operates in O(1) as etas come sorted by API
 		return min(etas, key = lambda x : x[0])
 
 	def getEtas(
@@ -727,10 +699,11 @@ class Stop:
 		if str(self.id) not in data:
 			return vehicles
 		for vehicle in data[str(self.id)]:
-			if returnInUTC:
-				eta = convertToUnixEta(vehicle["secondsSpent"])
-			else:
-				eta = vehicle["secondsSpent"]
+			if vehicle["etaR"]: #etaR is "" when eta is unavailable
+				if returnInUTC:
+					eta = convertToUnixEta(vehicle["secondsSpent"])
+				else:
+					eta = vehicle["secondsSpent"]
 			vehicles.append((eta, self.system.getVehicleById(int(vehicle["busId"]))))
 		return vehicles
 	
