@@ -1,4 +1,6 @@
 import json
+from typing import Optional, List
+
 import requests
 import websocket
 
@@ -582,6 +584,47 @@ class Route:
 
 		self.stops = stopsForRoute
 		return(stopsForRoute)
+
+	def getVehicles(
+			self,
+			appVersion: int = 1
+	) -> List["Vehicle"]:
+		"""
+		Gets all vehicles following this route
+		"""
+
+		vehiclesForSystem = self.system.getVehicles(appVersion=appVersion)
+		vehiclesForRoute = [vehicle for vehicle in vehiclesForSystem if str(vehicle.routeId) == self.myid]
+		return vehiclesForRoute
+
+	def getStopById(
+			self,
+			stopId: str
+	) -> Optional["Stop"]:
+		"""
+		Returns a Stop object corresponding to the provided ID.
+		"""
+
+		stopsForRoute = self.getStops()
+		for stop in stopsForRoute:
+			if str(stop.id) == str(stopId):
+				return stop
+		return None
+
+	def getVehicleById(
+			self,
+			vehicleId: str,
+	) -> Optional["Vehicle"]:
+		"""
+		Returns a Vehicle object corresponding to the provided ID.
+		"""
+
+		vehiclesForSystem = self.getVehicles()
+		for vehicle in vehiclesForSystem:
+			if str(vehicle.id) == str(vehicleId):
+				return vehicle
+		return None
+
 
 	def refresh(self):
 		self.stops = []
