@@ -8,11 +8,21 @@ BASE_URL = "https://passiogo.com"
 ### Helper Functions ###
 
 def toIntInclNone(toInt):
+	"""
+	Cast to int, returning None if input is None
+	"""
 	if toInt == None:
 		return toInt
 	return(int(toInt))
 
-	
+def toFloatInclNone(toFloat):
+	"""
+	Cast to float, returning None if input is None
+	"""
+	if toFloat is None:
+		return toFloat
+	return float(toFloat)
+
 def sendApiRequest(url, body):
 	
 	# Send Request
@@ -469,27 +479,28 @@ def getSystems(
 		for parameter in system.keys():
 			if system[parameter] == '':
 				system[parameter] = None
-		try:
-			allSystems.append(TransportationSystem(
-				id = int(system["id"]),
-				name = system["fullname"],
-				username = system["username"],
-				goAgencyName = system["goAgencyName"],
-				email = system["email"],
-				goTestMode = bool(int(system["goTestMode"])),
-				name2 = bool(int(system["name2"])),
-				homepage = system["homepage"],
-				logo = bool(int(system["logo"])),
-				goRoutePlannerEnabled = bool(int(system["goRoutePlannerEnabled"])),
-				goColor = system["goColor"],
-				goSupportEmail = system["goSupportEmail"],
-				goSharedCode = toIntInclNone(system["goSharedCode"]),
-				goAuthenticationType = bool(int(system["goAuthenticationType"])),
-			))
-		except Exception as e:
-			print(e)
-			print(system)
-			return()
+		
+		# Check all keys exist
+		for key in ["goAgencyName", "email", "email", "goTestMode", "name2", "homepage", "logo", "goRoutePlannerEnabled", "goColor", "goSupportEmail", "goSharedCode", "goAuthenticationType"]:
+			if key not in system.keys():
+				system[key] = None
+		
+		allSystems.append(TransportationSystem(
+			id = int(system["id"]),
+			name = system["fullname"],
+			username = system["username"],
+			goAgencyName = system["goAgencyName"],
+			email = system["email"],
+			goTestMode = bool(int(system["goTestMode"])),
+			name2 = bool(int(system["name2"])),
+			homepage = system["homepage"],
+			logo = bool(int(system["logo"])),
+			goRoutePlannerEnabled = bool(int(system["goRoutePlannerEnabled"])),
+			goColor = system["goColor"],
+			goSupportEmail = system["goSupportEmail"],
+			goSharedCode = toIntInclNone(system["goSharedCode"]),
+			goAuthenticationType = bool(int(system["goAuthenticationType"])),
+		))
 	
 	
 	return(allSystems)
@@ -540,7 +551,7 @@ class Route:
 		shortName: str = None,
 		nameOrig: str = None,
 		fullname: str = None,
-		myid: int = None,
+		myid: str = None,
 		mapApp: bool = None,
 		archive: bool = None,
 		goPrefixRouteName: bool = None,
@@ -555,22 +566,23 @@ class Route:
 		systemId: id = None,
 		system: TransportationSystem = None,
 	):
-		self.id = id
-		self.groupId = groupId
+		self.id = toIntInclNone(id)
+		self.groupId = toIntInclNone(groupId)
 		self.groupColor = groupColor
 		self.name = name
 		self.shortName = shortName
 		self.nameOrig = nameOrig
 		self.fullname = fullname
 		self.myid = myid
-		self.mapApp = mapApp
-		self.archive = archive
-		self.goPrefixRouteName = goPrefixRouteName
-		self.goShowSchedule = goShowSchedule
-		self.outdated = outdated
+		self.mapApp = bool(toIntInclNone(mapApp))
+		self.archive = bool(toIntInclNone(archive))
+		self.goPrefixRouteName = bool(toIntInclNone(goPrefixRouteName))
+		self.goShowSchedule = bool(toIntInclNone(goShowSchedule))
+		self.outdated = bool(toIntInclNone(outdated))
 		self.distance = distance
-		self.latitude = latitude
-		self.longitude = longitude
+		self.latitude = toFloatInclNone(latitude)
+		self.longitude = toFloatInclNone(longitude)
+		self.timezone = timezone
 		self.serviceTime = serviceTime
 		self.serviceTimeShort = serviceTimeShort
 		self.systemId = systemId
@@ -659,34 +671,34 @@ class SystemAlert:
 		toOk: bool = None,
 	):
 		self.id = id
-		self.systemId = systemId
+		self.systemId = toIntInclNone(systemId)
 		self.system = system
 		self.routeId = routeId
 		self.name = name
 		self.html = html
-		self.archive = archive
-		self.important = important
+		self.archive = bool(toIntInclNone(archive))
+		self.important = bool(toIntInclNone(important))
 		self.dateTimeCreated = dateTimeCreated
 		self.dateTimeFrom = dateTimeFrom
 		self.dateTimeTo = dateTimeTo
-		self.asPush = asPush
-		self.gtfs = gtfs
-		self.gtfsAlertCauseId = gtfsAlertCauseId
-		self.gtfsAlertEffectId = gtfsAlertEffectId
+		self.asPush = bool(toIntInclNone(asPush))
+		self.gtfs = bool(toIntInclNone(gtfs))
+		self.gtfsAlertCauseId = bool(toIntInclNone(gtfsAlertCauseId))
+		self.gtfsAlertEffectId = bool(toIntInclNone(gtfsAlertEffectId))
 		self.gtfsAlertUrl = gtfsAlertUrl
 		self.gtfsAlertHeaderText = gtfsAlertHeaderText
 		self.gtfsAlertDescriptionText = gtfsAlertDescriptionText
 		self.routeGroupId = routeGroupId
 		self.createdUtc = createdUtc
-		self.authorId = authorId
+		self.authorId = toIntInclNone(authorId)
 		self.author = author
 		self.updated = updated
-		self.updateAuthorId = updateAuthorId
+		self.updateAuthorId = toIntInclNone(updateAuthorId)
 		self.updateAuthor = updateAuthor
 		self.createdF = createdF
 		self.fromF = fromF
-		self.fromOk = fromOk
-		self.toOk = toOk
+		self.fromOk = bool(toIntInclNone(fromOk))
+		self.toOk = bool(toIntInclNone(toOk))
 
 
 
@@ -722,10 +734,11 @@ class Vehicle:
 		self.routeName = routeName
 		self.color = color
 		self.created = created
-		self.longitude = latitude
+		self.latitude = toFloatInclNone(latitude)
+		self.longitude = toFloatInclNone(longitude)
 		self.speed = speed
 		self.paxLoad = paxLoad
-		self.outOfService = outOfService
+		self.outOfService = bool(outOfService)
 		self.more = more
 		self.tripId = tripId
 
