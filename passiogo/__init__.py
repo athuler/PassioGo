@@ -569,7 +569,7 @@ class Route:
 	
 	def __init__(
 		self,
-		id: str,
+		id: int,
 		groupId: int = None,
 		groupColor: str = None,
 		name: str = None,
@@ -686,8 +686,7 @@ class Stop:
 		if not etas:
 			return None
 
-		# Generally operates in O(1) as etas come sorted by API
-		return min(etas, key = lambda x : x[0])
+		return etas[0]
 
 	def getEtas(
 			self,
@@ -710,12 +709,12 @@ class Stop:
 		if str(self.id) not in data:
 			return vehicles
 		for vehicle in data[str(self.id)]:
-			if vehicle["etaR"]: #etaR is "" when eta is unavailable
+			if "etaR" in vehicle and vehicle["etaR"]: #etaR is "" when eta is unavailable
 				if returnInUTC:
 					eta = convertToUnixEta(vehicle["secondsSpent"])
 				else:
 					eta = vehicle["secondsSpent"]
-			vehicles.append((eta, self.system.getVehicleById(int(vehicle["busId"]))))
+				vehicles.append((eta, self.system.getVehicleById(int(vehicle["busId"]))))
 		return vehicles
 	
 
