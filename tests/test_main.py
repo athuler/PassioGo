@@ -23,11 +23,17 @@ def test_getSystemFromId():
 	testSystem = passiogo.getSystemFromID(1068)
 	assert True
 
+def test_getRouteById():
+	testSystem.getRouteById(133007)
+	pass
 
 @pytest.mark.parametrize("system", pytest.allSystems, ids=ids)
 def test_getAllRoutes(system):
 	system.getRoutes()
 
+def test_getStopById():
+	testSystem.getStopById(140059)
+	pass
 
 @pytest.mark.parametrize("system", pytest.allSystems, ids=ids)
 def test_getAllStops(system):

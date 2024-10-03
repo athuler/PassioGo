@@ -2,6 +2,7 @@
 
 [![PyPI - Version](https://img.shields.io/pypi/v/passiogo?label=Latest%20Version&link=https%3A%2F%2Fpypi.org%2Fproject%2FPassioGo%2F)](https://pypi.org/project/PassioGo/)
 [![Pepy Total Downlods](https://img.shields.io/pepy/dt/PassioGo)](https://www.pepy.tech/projects/passiogo)
+[![GitHub Testing](https://img.shields.io/github/actions/workflow/status/athuler/passiogo/testing.yml?branch=main&label=tests)](https://github.com/athuler/PassioGo)
 [![Documentation Status](https://readthedocs.org/projects/passiogo/badge/?version=latest)](https://passiogo.readthedocs.io/en/latest/?badge=latest)
 
 
@@ -20,7 +21,7 @@ pip install passiogo
 
 ## Documentation
 
-Project documentation for the latest stable version is available at [passiogo.readthedocs.io](https://passiogo.readthedocs.io/). Documentation for other versions is available at [passiogo.readthedocs.io/en/X.X.X](https://passiogo.readthedocs.io/en/0.1.2/).
+Project documentation for the latest stable version is available at [passiogo.readthedocs.io](https://passiogo.readthedocs.io/). Documentation for other versions is available at [passiogo.readthedocs.io/en/X.X.X](https://passiogo.readthedocs.io/en/0.3.0/).
 
 The documentation is built using `mkdocs` and can be rebuilt using the following:
 
