@@ -1,6 +1,32 @@
 # Changelog
 
 
+## 0.3.0 (Unreleased)
+
+### Added
+
+- `TransportationSystem.getRouteById()` method to get a Route object by its ID
+- `TransportationSystem.getStopById()` method to get a Stop object by its ID
+
+### Changed
+
+- `Route.id` is now handled as a string
+
+### Removed
+
+
+## 0.2.2 (2024-09-10)
+
+### Added
+
+
+### Changed
+
+- Fixed key error while fetching systems. (#22)
+
+### Removed
+
+
 ## 0.2.1 (2024-08-18)
 
 ### Added
