@@ -683,7 +683,8 @@ class Vehicle:
 		self.routeName = routeName
 		self.color = color
 		self.created = created
-		self.longitude = latitude
+		self.longitude = longitude
+		self.latitude = latitude
 		self.speed = speed
 		self.paxLoad = paxLoad
 		self.outOfService = outOfService
