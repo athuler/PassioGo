@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools >= 80.9.0", "wheel >= 0.45.1", "pytest >= 9.0.2", "requests >= 2.22.0", "websocket_client >= 1.2.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "passiogo_fix"
+version = "0.0.3"
+authors = [
+  { name="Antonios Theocharopoulos", email="antoniostheo06@gmail.com" },
+]
+description = "An unofficial Python API for Passio Go allowing anyone to build transit-based applications for hundreds of Universities, Municipalities, Paratransit, and Airports. Based on Andrei Thüler's API, with the vehicle latitude/longitude issue fixed."
+readme = "README.md"
+requires-python = ">=3.12"
+license = "MIT"
+license-files = ["LICEN[CS]E*"]
+
+[project.urls]
+Homepage = "https://github.com/AntoniosTheo06/PassioGoVehicleFix"
+Issues = "https://github.com/AntoniosTheo06/PassioGoVehicleFix/issues"
