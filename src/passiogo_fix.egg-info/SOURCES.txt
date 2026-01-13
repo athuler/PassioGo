@@ -1,0 +1,9 @@
+LICENSE
+README.md
+pyproject.toml
+src/passiogo_fix/__init__.py
+src/passiogo_fix/passiogo.py
+src/passiogo_fix.egg-info/PKG-INFO
+src/passiogo_fix.egg-info/SOURCES.txt
+src/passiogo_fix.egg-info/dependency_links.txt
+src/passiogo_fix.egg-info/top_level.txt

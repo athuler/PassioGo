@@ -1,3 +1,16 @@
+Metadata-Version: 2.4
+Name: passiogo_fix
+Version: 0.0.3
+Summary: An unofficial Python API for Passio Go allowing anyone to build transit-based applications for hundreds of Universities, Municipalities, Paratransit, and Airports. Based on Andrei Thüler's API, with the vehicle latitude/longitude issue fixed.
+Author-email: Antonios Theocharopoulos <antoniostheo06@gmail.com>
+License-Expression: MIT
+Project-URL: Homepage, https://github.com/AntoniosTheo06/PassioGoVehicleFix
+Project-URL: Issues, https://github.com/AntoniosTheo06/PassioGoVehicleFix/issues
+Requires-Python: >=3.12
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Dynamic: license-file
+
 # Passio Go API Fixed
 
 [![PyPI - Version](https://img.shields.io/pypi/v/passiogo-fix?label=Latest%20Version&link=https%3A%2F%2Fpypi.org%2Fproject%2Fpassiogo-fix%2F)](https://pypi.org/project/passiogo-fix/)
